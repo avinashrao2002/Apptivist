@@ -9,7 +9,7 @@ var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis
 var isAProduct = false
 
 function checkIfLoggedIn(){
-  if (localStorage['myUser'] == undefined) {
+  if (typeof localStorage['myUser'] == undefined || localStorage['myUser'] == "N/A") {
     window.location.href = "login_signup.html";
   }
 }
