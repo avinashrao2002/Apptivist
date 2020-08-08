@@ -177,7 +177,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
   
   function logout(){
     firebase.auth().signOut();
-    localStorage['myUser'] = "N/A";
+    localStorage['myUser'] = undefined;
     window.location.href = "login_signup.html";
   }
 
