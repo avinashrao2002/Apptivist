@@ -115,9 +115,9 @@
     }
     function checker(){
       console.log(localStorage['myUser'])
-  if (typeof localStorage['myUser'] == undefined || localStorage['myUser'] == "N/A") {
+ 
+  if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
     window.location.href = "login_signup.html";
-    console.log("why")
   }
 }
 
