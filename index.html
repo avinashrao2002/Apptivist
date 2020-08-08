@@ -113,6 +113,12 @@
       window.location.href = "login_signup.html"
       logout()
     }
+    function checkIfLoggedIn(){
+  if (localStorage['myUser'] == undefined) {
+    window.location.href = "login_signup.html";
+  }
+}
+
   </script>
 </body>
 
