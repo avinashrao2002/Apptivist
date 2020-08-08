@@ -49,7 +49,7 @@
     <!-- Right-aligned links -->
     <div class="topnav-right">
       
-      <a href="#about" onclick="logout()">Logout</a>
+      <a href="#about" onclick="toLogout()">Logout</a>
     </div>
   
   </div>
@@ -109,6 +109,10 @@
       viewThisProfile(param)
       
 }
+    function toLogout(){
+      window.location.href = "login_signup.html"
+      logout()
+    }
   </script>
 </body>
 

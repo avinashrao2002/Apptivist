@@ -1058,3 +1058,7 @@ async function unfollow() {
  function toCustomDesigner(){
   window.location.href = "postermaker.html";
  }
+ function findProfile(){
+  localStorage["userToView"] = myUser
+  window.location.href = "profile.html";
+}
