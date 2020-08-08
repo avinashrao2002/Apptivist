@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<body>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+
+    <div class = "chat">
+      <div class = "chat-window" id = "chat-window">
+        <ul id = "messages">
+          <li class="msg">
+            <span class = "msg-span">
+              <i class = "name">Host: </i>Hello and welcome to chat
+            </span>
+          </li>
+        </ul>
+        <form id = "messageForm" autocomplete="off">
+          <input type = "text" id = "msg-input" placeholder="Enter a message">
+          <button id = "msg-btn" type = "submit">Send</button>
+        </form>
+      </div>
+    </div>
+<script>
+
+myUser = localStorage["myUser"]
+
+  // Initialize Firebase
+  var config = {
+      apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+      authDomain: "protestapp-599ff.firebaseapp.com",
+      databaseURL: "https://protestapp-599ff.firebaseio.com",
+      projectId: "protestapp-599ff",
+      storageBucket: "protestapp-599ff.appspot.com",
+      messagingSenderId: "728327151722",
+      appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+};
+
+  firebase.initializeApp(config);
+  let myName = myUser
+const msgScreen = document.getElementById("messages"); //the <ul> that displays all the <li> msgs
+const msgForm = document.getElementById("messageForm"); //the input form
+const msgInput = document.getElementById("msg-input"); //the input element to write messages
+const msgBtn = document.getElementById("msg-btn"); //the Send button
+const rdb = firebase.database();
+const msgRef = rdb.ref("/msgs"); 
+//to store data in the msgs folder by creating a reference in database
+function sendMessage(e){
+  e.preventDefault();
+  const text = msgInput.value;
+
+    if(!text.trim()) return alert('Please type a message'); //no msg submitted
+    const msg = {
+        userName: myUser,
+        text: text,
+        timestamp: new Date().getTime()
+    };
+
+    msgRef.push(msg);
+    msgInput.value = "";
+}
+//addeventlistener thing might be missing!!
+  msgForm.addEventListener('submit', sendMessage);
+const updateMsgs = data =>{
+  const {userName, text, timestamp} = data.val(); //get name and text
+
+  //load messages, display on left if not the user's name. Display on right if it is the user.
+  const msg = `<li class="${userName == myName ? "msg my": "msg"}"><span class = "msg-span">
+    <i class = "name">${userName}: </i>${text} </i>${timestamp}
+    </span>
+  </li>`
+
+  msgScreen.innerHTML += msg; //add the <li> message to the chat window
+
+  //auto scroll to bottom
+  document.getElementById("chat-window").scrollTop = document.getElementById("chat-window").scrollHeight;
+}
+msgRef.on('child_added', updateMsgs);
+
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

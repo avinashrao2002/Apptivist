@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+  </head>
+  <body>
+    <input type="file" value = "upload" id="fileButton">
+ 
+  </body>
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+      apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+      authDomain: "protestapp-599ff.firebaseapp.com",
+      databaseURL: "https://protestapp-599ff.firebaseio.com",
+      projectId: "protestapp-599ff",
+      storageBucket: "protestapp-599ff.appspot.com",
+      messagingSenderId: "728327151722",
+      appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+};
+
+  firebase.initializeApp(config);
+
+  var storage = firebase.storage();
+  var fileButton = document.getElementById('fileButton');
+  fileButton.addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    var storageRef = storage.ref('dogs/' + file.name);
+    storageRef.put(file);
+  })
+</script>
+<script src="app.js">
+    
+</script>
+<script>
+function showimage() {
+
+
+
+var storageRef = storage.ref();
+var spaceRef = storageRef.child('dogs/dog.jpg');
+storageRef.child('dogs/dog.jpg').getDownloadURL().then(function(url) {
+    var test = url;
+    alert(url);
+    document.querySelector('img').src = test;
+
+}).catch(function(error) {
+
+});
+
+
+}
+</script>
+<input type="button" value ="view Image" id="viewbtn" onclick="showimage();">
+<img src="test" height="125px" width="200px"/> 
+
+  
+</html>
+
+
+
+</body>

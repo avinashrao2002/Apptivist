@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="realfeed.css">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/{version}/croppie.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/{version}/croppie.min.js"></script>
+
+    <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="realfeed.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+</head>
+
+<body onload="myfunc(), profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons()">
+    <style>
+        body{
+            color: #124665;
+            overflow: auto;
+        }
+    </style>
+<script>
+    userToView = localStorage['userToView'] || "fa"
+</script>
+<div class="topnav">
+
+    <!-- Centered link -->
+    <div class="topnav-centered">
+   <p style="text-align: center; margin-top: 20px; margin-bottom: 0px;">
+      <img src="apptivistLogorn.png" alt="" class = "apptivistLogo">
+  </p>
+    </div>
+  
+    <!-- Left-aligned links (default) -->
+    <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
+    <a href="#contact" style="margin-right: 30%;">Contact</a>
+    <a href="#search">Search</a>
+  
+    <!-- Right-aligned links -->
+    <div class="topnav-right">
+      
+      <a href="#about" onclick="logout()">Logout</a>
+    </div>
+  
+  </div>
+<div style="text-align: center;">
+ 
+    <div class="profile">
+
+        <div class="profile-pic" style="text-align: center; align-self: center; margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;" >
+
+            <img class = "profile-pic" id = "profileImage" alt="" style="text-align: center; margin-left: auto; margin-right: auto;">
+
+        </div>
+
+        <div class="profile-user-settings">
+
+            <h1 class="profile-user-name" id = "username"><span id = "username" ></span></h1>
+
+
+
+
+      <div id="profileSettings" style = "display: none;">  
+                
+        <label for="uploadpfp" class="myRealButtons" style="color: black; height: 30px; width: 300px; border: 20px thin black; cursor: pointer;">Update Your Profile Picture</label>
+                <input type="file" name = "changeProf" id ="uploadpfp">  
+                <button class="myRealButtons" id= "dfs"style="color: #EAEEED; background-color: #124665;" onclick="updatePfp(myUser)">Confirm</button>
+                <br>
+                Update your Bio:
+                <input type="text" id="bioInput" style="width: 600px; height: 50px; border-radius: 20px;">
+                <button class="myRealButtons" id="1jds" style="color: #EAEEED; background-color: #124665; " onclick="updateBio()">Confirm</button>
+    </div>
+        
+
+        <div >
+<div style="display: inline;">
+    <span style="display: inline;">
+       
+
+ <p id="countFollowers" style="display: inline;">0 followers</p>
+ <p style="display: inline;">|</p>
+ <p id="countFollowing" style="display: inline;">0 following</p>
+ <button class="btn profile-settings-btn" aria-label="profile settings" onclick="editUser()"><i class="fas fa-cog" aria-hidden="true"></i></button>
+ 
+</span>
+</div>
+        </div>
+        <div style="display: inline;">
+<button class="myRealButtons" id="follow" style="color: #EAEEED; background-color: #124665; display: none;" onclick="follow()">Follow</button>
+        <button class="myRealButtons" id="unfollow" style="color: #EAEEED; background-color: #124665; margin-bottom: 20px; display: none;" onclick="unfollow()">Unfollow</button>
+    </div>
+        <div class="profile-bio" >
+
+            <b><p><span class="profile-real-name"  id = "real_name" style = "margin-top: 10px;"> - - </span> </p></b>
+            <p id="bio" style=" margin-bottom: 20px;" ></p>
+
+        </div>
+
+    </div>
+    <!-- End of profile section -->
+    <div class="choices" style=" padding-bottom: 100px">
+        <button class="myRealButtons" style="color: #EAEEED; background-color: #124665;" onclick="retrieveMyPosts(userToView), hideProtests()">Posts</button>
+        <button class="myRealButtons" style="color: #EAEEED; background-color: #124665;" onclick="retrieveProtests(), hidePosts()">Protests</button>
+    </div>
+
+</div>
+
+</div>
+
+    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; margin-left:280px ;" >
+
+        <tbody>
+            <tr>
+
+            </tr>
+        </tbody>
+    
+    </table>
+
+    <div id ="as" style=" color: #EAEEED;">
+        <table id="protestsTable" class="myTable, center" style="margin-left:300px" >
+    
+            <tbody>
+                <tr>
+
+                </tr>
+            </tbody>
+     </table>    
+
+</div>
+
+
+<section class="nav">
+
+
+    <div class="icon" onclick="viewMyFeed()" style="cursor: pointer;">
+      <i class="fas fa-fire"></i>
+      <p>Feed</p>
+    </div>
+
+
+    <div class="icon" onclick="viewMyProtests()" style="cursor: pointer;">
+      <i class="fas fa-comment-dots"></i>
+      <p>Protests</p>
+    </div>
+
+
+    <div class="icon" onclick="viewSearch()" style="cursor: pointer;">
+      <i class="fas fa-bell"></i>
+      <p>Search</p>
+    </div> 
+
+
+    <div class="icon" onclick="viewMyProfile()" style="cursor: pointer;">
+      <i class="fas fa-user"></i>
+      <p>Profile</p>
+
+    </div>
+  </section>
+
+<!-- End of container -->
+<script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+<script>
+
+
+  // Initialize Firebase
+  var config = {
+      apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+      authDomain: "protestapp-599ff.firebaseapp.com",
+      databaseURL: "https://protestapp-599ff.firebaseio.com",
+      projectId: "protestapp-599ff",
+      storageBucket: "protestapp-599ff.appspot.com",
+      messagingSenderId: "728327151722",
+      appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+};
+
+  firebase.initializeApp(config);
+
+  var storage = firebase.storage();
+  var uploadpfp = document.getElementById('uploadpfp');
+
+  uploadpfp.addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  console.log("i've makde it this far");
+  var storageRef = storage.ref(myUser + '/' + myUser + "pfp");
+  storageRef.put(file); 
+})
+</script>
+<script src="app.js">
+
+</script>
+</body>
+</html>

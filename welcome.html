@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Apptivist</title>
+</head>
+<body>
+    <p>Welcome to Apptivist! We're excited to have you onboard our beta-testing Demo Kit of the app. 
+        Here are a few things to get you started: 
+        -Navigate through the app with the navbar at the bottom
+        -Check out the feed and events pages by clicking on the link at the bottom
+        -Make your own custom post designs with the Apptivist-Post-Editor
+        -Search for other user profiles and grow your community!
+    </p>
+    <button onclick = "toFeed()"> OK </button>
+    
+    <script>
+        function toFeed(){
+            window.location.href = "http://localhost:8000/realfeed.html";
+        }
+    </script>
+</body>
+
+</html>

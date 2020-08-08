@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+
+  <div id="login_div" class="main-div">
+    <h3>Login</h3>
+    <input type="email" placeholder="Email..." id="email_field" />
+    <input type="password" placeholder="Password..." id="password_field" />
+
+    <button onclick="login()">Login to Account</button>
+  </div>
+
+
+  </div>
+
+  <div id="user_div" class="loggedin-div">
+    <h3>Welcome User</h3>
+    <p id="user_para">Welcome to Firebase web login Example. You're currently logged in.</p>
+    <button onclick="logout()">Logout</button>
+  </div>
+<button onclick="findProfile()">Take me to profile</button>
+<div id = "create_account" class = "main-div">
+    <h1>account creation</h1>
+    <input type="text" placeholder="email..." id="field1">
+    <input type="text" placeholder="firstname..." id="field2">
+    <input type="text" placeholder="lastname..." id="field4">
+    <input type="text" placeholder="username..." id="field6">
+    <input type="text" placeholder="password..." id="field5">
+    <button onclick="test()">Create my account</button>
+</div>
+  
+
+
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+        authDomain: "protestapp-599ff.firebaseapp.com",
+        databaseURL: "https://protestapp-599ff.firebaseio.com",
+        projectId: "protestapp-599ff",
+        storageBucket: "protestapp-599ff.appspot.com",
+        messagingSenderId: "728327151722",
+        appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+  };
+
+    firebase.initializeApp(config);
+  </script>
+
+  <script>
+    function findProfile(){
+      window.location.href = "http://localhost:8000/profile.html";
+    }
+  </script>
+  <script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+       <h1>Enter your name below</h1> 
+        <form id="resgister-form">
+            <input type="text" name="firstName" placeholder="First Name">
+            <input type="text" name="lastName" placeholder="Last Name">
+            <input type="text" name="email" placeholder="Email">
+            <input type="text" name="password" placeholder="Password">
+        <button>register</button>
+        </form>
+        <ul id="cafe-list"></ul>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+    authDomain: "protestapp-599ff.firebaseapp.com",
+    databaseURL: "https://protestapp-599ff.firebaseio.com",
+    projectId: "protestapp-599ff",
+    storageBucket: "protestapp-599ff.appspot.com",
+    messagingSenderId: "728327151722",
+    appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  db.settings({timestampInSnapshots: true});
+
+        </script>
+        <script src = "app.js"></script>
+    </body>
+</html>

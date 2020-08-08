@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <link rel="stylesheet" href="croppie.css" />
+
+    <script src="croppie.js">
+
+
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    <img class="my-image" src="IMG_2721.jpg" id = "demo-basic" />
+
+    <script src = "croppie.js">
+        $('.my-image').croppie();
+        var c = new Croppie(document.getElementById('item'), opts);
+// call a method
+c.method(args);
+var basic = $('#demo-basic').croppie({
+    viewport: {
+        width: 150,
+        height: 200
+    }
+});
+basic.croppie('bind', {
+    url: 'IMG_2721.jpg',
+    points: [77,469,280,739]
+});
+//on button click
+basic.croppie('result', 'html').then(function(html) {
+    // html is div (overflow hidden)
+    // with img positioned inside.
+});
+        </script>
+
+
+
+<!-- or even simpler -->
+</body>
+</html>

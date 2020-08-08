@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="realfeed.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/momentjs/2.14.1/moment.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="realfeed.css">
+    <title>protestfeed</title>
+</head>
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: relative; top: 0; bottom: 0; width: 1000px; height: 1000px;}
+</style>
+<style>
+    body {
+    font-family: 'Montserrat';
+background-color: #124665;
+  }
+    .coordinates {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    padding: 5px 10px;
+    margin: 0;
+    font-size: 11px;
+    line-height: 18px;
+    border-radius: 3px;
+    display: none;
+    }
+    .buttoncolor {
+        color: black;
+    }
+    </style>
+<body onload = "hideProtest()">
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+<link
+rel="stylesheet"
+href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+type="text/css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+<div id ="as">
+    
+ <button onclick="showProtest()" class = "buttoncolor, myRealButtons" style="color: black;">Make your own protest</button> 
+ <button onclick="getLocation()" class = "buttoncolor, myRealButtons" style="color: black;">Testing Button</button>  
+</div>
+<div id = "createPost">
+    
+    <p>Protest Name</p>
+    <input type="text" id="protestName" class="protestName, buttoncolor">
+    <br>
+    <p>Protest Description</p>
+    <br>
+    <input type="text" id="protestDescription" class="protestDescription, buttoncolor">
+    <br>
+
+    <p>When?</p>
+    <br>
+    <input type="datetime-local" id="startdate" name="birthdaytime" class = "buttoncolor">
+    <br>
+    <input type="datetime-local" id="enddate" name="birthdaytime" class = "buttoncolor">
+<br>
+    <p>Where?</p>
+    <br>
+    <div id='map' style='width: 400px; height: 300px;'></div>
+    <br>
+    <button onclick="makeProtest('avinash_rao05')" class = "buttoncolor, myRealButtons">Make your protest!</button> 
+    <button onclick="hideProtest()" class = "buttoncolor , myRealButtons"">Cancel</button>  
+    
+    <br>
+    <script>
+      
+        </script>
+     
+
+    <pre id="coordinates" class="coordinates"></pre>
+
+
+    <script>
+        $(function () {
+          $('#datetimepicker1').datetimepicker();
+       });
+      </script>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoicHJvdGVzdGFwcDgxIiwiYSI6ImNrZDR0b3NuZTA5dzEydm4xc3doaDFzNjkifQ.wM_eBlK62-STgRjqCGoJzw';
+var coordinates = document.getElementById('coordinates');
+var latlong = [0,0]
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [0, 0],
+zoom: 2
+});
+
+var long = 0
+var lat = 0
+ 
+console.log("https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json?access_token=pk.eyJ1IjoicHJvdGVzdGFwcDgxIiwiYSI6ImNrZDR0b3NuZTA5dzEydm4xc3doaDFzNjkifQ.wM_eBlK62-STgRjqCGoJzw")
+var marker = new mapboxgl.Marker({
+draggable: true
+})
+.setLngLat([0, 0])
+.addTo(map);
+ 
+function onDragEnd() {
+var lngLat = marker.getLngLat();
+coordinates.style.display = 'block';
+coordinates.innerHTML =
+'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+}
+ 
+marker.on('dragend', onDragEnd);        
+var geocoder = new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken,
+            mapboxgl: mapboxgl
+        })
+map.addControl(geocoder);
+geocoder.on('results', function(results) {
+
+
+   latlong = results.features[0].center
+
+})
+
+function bro(){
+    console.log(document.getElementById("datetime").value);
+}
+geocoder.query("City Hall, San Francisco")
+
+
+
+
+    // Driver Code 
+    function testdate(){
+        var abc = document.getElementById("datetime").value
+        var someDate = new Date(abc);
+        someDate = someDate.getTime();
+        someDate = someDate/1000
+        return someDate 
+    }
+
+
+    function showProtest(){
+        document.getElementById("createPost").style.display = "block";
+    }
+
+    function hideProtest(){
+        document.getElementById("createPost").style.display = "none";
+    }
+
+</script>
+
+</div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+      apiKey: "AIzaSyDG8tk9zj5v6lp3ue3MO9TGGWLegy-lXf8",
+      authDomain: "protestapp-599ff.firebaseapp.com",
+      databaseURL: "https://protestapp-599ff.firebaseio.com",
+      projectId: "protestapp-599ff",
+      storageBucket: "protestapp-599ff.appspot.com",
+      messagingSenderId: "728327151722",
+      appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
+};
+firebase.initializeApp(config);
+</script>
+</script>
+<script src="app.js"></script>
+</body>
+
+</html>
