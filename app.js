@@ -9,12 +9,12 @@ var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis
 var isAProduct = false
 
 function checkIfLoggedIn(){
-  if (localStorage['myUser'] == "N/A") {
+  if (localStorage['myUser'] == undefined) {
     window.location.href = "login_signup.html";
   }
 }
 
-console.log(localStorage["myUser"])
+
 async function test() {
   var signupemail = document.getElementById("field1").value;
   var signuppass = document.getElementById("field5").value;
