@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="realfeed.css">
-    <title>protestfeed</title>
+    <title>Create a Protest</title>
 </head>
 <style>
 	body { margin: 0; padding: 0; }
@@ -34,7 +34,7 @@
 <style>
     body {
     font-family: 'Montserrat';
-background-color: #124665;
+background-color: #EAEEED;
   }
     .coordinates {
     background: rgba(0, 0, 0, 0.5);
@@ -64,36 +64,92 @@ type="text/css"
 
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<div class="topnav">
 
-<div id ="as">
+    <!-- Centered link -->
+    <div class="topnav-centered">
+   <p style="text-align: center; margin-top: 20px; margin-bottom: 0px;">
+      <img src="apptivistLogorn.png" alt="" class = "apptivistLogo">
+  </p>
+    </div>
+  
+    <!-- Left-aligned links (default) -->
+    <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
+    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 30%;">Organize an Event</a>
+    <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
+  
+    <!-- Right-aligned links -->
+    <div class="topnav-right">
+      
+      <a href="#about" onclick="logout()">Logout</a>
+    </div>
+  
+  </div>
+<div style="text-align: center;">
+
     
- <button onclick="showProtest()" class = "buttoncolor, myRealButtons" style="color: black;">Make your own protest</button> 
- <button onclick="getLocation()" class = "buttoncolor, myRealButtons" style="color: black;">Testing Button</button>  
+ <button onclick="showProtest()" class = "buttoncolor, myRealButtons" style="color: #fff; margin-top: 100px; width: 200px; height: 100px; font-size: 20px; background-color: #124665;">Make your own protest</button> 
+ 
+
+<div id = "createPost" style="margin-bottom: 300px;">
+    
+    <p style="color: #124665; display: inline;">Protest Name: </p>
+    <input type="text" id="protestName" class="protestName, buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; display: inline; margin-bottom: 30px; margin-top: 30px;">
+    <br>
+    <p style="color: #124665; display: inline;">Protest Description: </p>
+    <input type="text" id="protestDescription" class="protestDescription, buttoncolor" style="display: inline; width: 600px; height: 50px; border-radius: 20px; text-align: center;">
+    <br>
+
+    <p style="color: #124665; margin-top: 30px;">When?</p>
+
+    <p style="color: #124665; display: inline;">Start Date: </p>
+    <input type="datetime-local" id="startdate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; display: inline; margin-top: 30px;">
+    <br>
+    <p style="color: #124665; display: inline;">End Date: </p>
+    <input type="datetime-local" id="enddate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center;display: inline; margin-top: 30px;">
+    <p style="color: #124665; margin-top: 30px;">Where?</p>
+    <br>
+    <div id='map' style='width: 800px; height: 800px; margin-left: auto; margin-right: auto;'></div>
+    <br>
+
+    <div style="display: inline;">
+    <button onclick="makeProtest('avinash_rao05')" class = "buttoncolor, myRealButtons" style="color: black;" >Make your protest!</button> 
+    <button onclick="hideProtest()" class = "buttoncolor , myRealButtons" >Cancel</button>  
+    </div>
+    <br>
 </div>
-<div id = "createPost">
-    
-    <p>Protest Name</p>
-    <input type="text" id="protestName" class="protestName, buttoncolor">
-    <br>
-    <p>Protest Description</p>
-    <br>
-    <input type="text" id="protestDescription" class="protestDescription, buttoncolor">
-    <br>
+<section class="nav">
 
-    <p>When?</p>
-    <br>
-    <input type="datetime-local" id="startdate" name="birthdaytime" class = "buttoncolor">
-    <br>
-    <input type="datetime-local" id="enddate" name="birthdaytime" class = "buttoncolor">
-<br>
-    <p>Where?</p>
-    <br>
-    <div id='map' style='width: 400px; height: 300px;'></div>
-    <br>
-    <button onclick="makeProtest('avinash_rao05')" class = "buttoncolor, myRealButtons">Make your protest!</button> 
-    <button onclick="hideProtest()" class = "buttoncolor , myRealButtons"">Cancel</button>  
-    
-    <br>
+    <div class="icon" onclick="toMarketplace()" style="cursor: pointer;">
+      <i class="fas fa-shopping-cart"></i>
+      <p>Marketplace</p>
+
+    </div>
+
+    <div class="icon" onclick="viewMyFeed()" style="cursor: pointer;">
+      <i class="fas fa-fire"></i>
+      <p>Feed</p>
+    </div>
+
+
+    <div class="icon" onclick="viewMyProtests()" style="cursor: pointer;">
+      <i class="fas fa-user-friends"></i>
+      <p>Protests</p>
+    </div>
+
+
+    <div class="icon" onclick="viewSearch()" style="cursor: pointer;">
+      <i class="fas fa-search"></i>
+      <p>Search</p>
+    </div> 
+
+
+    <div class="icon" onclick="viewMyProfile()" style="cursor: pointer;">
+      <i class="fas fa-user"></i>
+      <p>Profile</p>
+
+    </div>
+  </section>
     <script>
       
         </script>

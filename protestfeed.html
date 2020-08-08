@@ -33,6 +33,7 @@
 <style>
 body{
   font-family: "montserrat";
+  background-color: #EAEEED;
 }
     .coordinates {
     background: rgba(0, 0, 0, 0.5);
@@ -73,14 +74,16 @@ type="text/css"
 
   <!-- Left-aligned links (default) -->
   <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-  <a href="#contact" style="margin-right: 30%;">Contact</a>
-  <a href="#search">Custom Designer</a>
+  <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 30%;">Organize an Event</a>
+  <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
 
   <!-- Right-aligned links -->
   <div class="topnav-right">
     
     <a href="#about" onclick="logout()">Logout</a>
   </div>
+
+</div>
 
 </div>
     <div id = "coverMap">
@@ -99,7 +102,7 @@ type="text/css"
             </tr>
         </tbody>
  </table>        
- <button onclick="showMap()">sfasdf</button>
+
 </div>
 
     <br>
@@ -137,7 +140,7 @@ type="text/css"
         <p>Profile</p>
   
       </div>
-    
+    </section>
 
 
 <script>

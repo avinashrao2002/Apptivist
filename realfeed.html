@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="realfeed.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
-  <title id>Social Networking App</title>
+  <title id>Apptivist</title>
 </head>
 
 <body onload = "checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
@@ -27,8 +27,8 @@
 
   <!-- Left-aligned links (default) -->
   <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-  <a href="#contact" style="margin-right: 30%;">Contact</a>
-  <a href="#search">Custom Designer</a>
+  <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 20%;">Organize an Event</a>
+  <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
 
   <!-- Right-aligned links -->
   <div class="topnav-right">
@@ -73,7 +73,7 @@
 
 
 
-  
+  <p style="text-align: center; color: #124665;">No Posts Yet! Follow other users to see posts or create one yourself!</p>
 
    
 

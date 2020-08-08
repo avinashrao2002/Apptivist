@@ -5,16 +5,17 @@ totalPosts = 0
 
 var myUser = localStorage['myUser'] || 'N/A';
 var userToView = localStorage['userToView'] || myUser;
+var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
 var isAProduct = false
 
 function checkIfLoggedIn(){
-  if (myUser == "N/A") {
-    window.location.href = "http://localhost:8000/login_signup.html";
+  if (localStorage['myUser'] == "N/A") {
+    window.location.href = "login_signup.html";
   }
 }
 
-
-function test() {
+console.log(localStorage["myUser"])
+async function test() {
   var signupemail = document.getElementById("field1").value;
   var signuppass = document.getElementById("field5").value;
 
@@ -26,7 +27,9 @@ function test() {
     lastName: document.getElementById("field4").value,
     userName: document.getElementById("field6").value,
     bio: "I am new to Apptivist!",
-    pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+    pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55",
+    followers: [document.getElementById("field6").value],
+    following: [document.getElementById("field6").value]
 
   };
   
@@ -35,16 +38,18 @@ function test() {
   db.collection('users').doc(document.getElementById("field6").value).set(data);
   
 
-  firebase.auth().createUserWithEmailAndPassword(signupemail, signuppass).catch(function(error) {
+  await firebase.auth().createUserWithEmailAndPassword(signupemail, signuppass).catch(function(error) {
     // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         window.alert("Error : " + errorMessage);
     // ...
     
-    window.location.href = "http://localhost:8000/welcome.html";
-  });
-  
+ 
+  });  
+  localStorage["myUser"] = data.userName
+  localStorage["cachedPfp"] = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+  window.location.href = "welcome.html";
 }
 function hidePostBox(){
   
@@ -148,14 +153,15 @@ firebase.auth().onAuthStateChanged(async function(user) {
       document.getElementById("login_div").style.display = "block";
       document.getElementById("signup_div").style.display = "block";
     }
+    findProfile()
   });
   
-  function login(){
+  async function login(){
   
     var userEmail = document.getElementById("email_field").value;
     var userPass = document.getElementById("password_field").value;
   
-    firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
+    await firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
@@ -165,12 +171,13 @@ firebase.auth().onAuthStateChanged(async function(user) {
       // ...
 
     });
-  
+    
   }
   
   function logout(){
     firebase.auth().signOut();
     localStorage['myUser'] = "N/A";
+    window.location.href = "login_signup.html";
   }
 
 
@@ -412,7 +419,10 @@ spanDiv.classList.add("spanForText")
 picandhandlediv.appendChild(profileImage)
 picandhandlediv.appendChild(document.createTextNode("@"))
 picandhandlediv.appendChild(pfpText)
-
+picandhandlediv.onclick = function() {
+  viewThisProfile(handle)
+}
+picandhandlediv.style.cursor = "pointer"
 var datediv = document.createElement("div")
 datediv.appendChild(timeInfo)
 datediv.classList.add("datediv")
@@ -738,20 +748,20 @@ async function updatePfp(user){
   for(q=1;q<userArray.length;q++){
   db.collection('posts').doc(user + String(q)).update(data)
   }
-
+  localStorage["cachedPfp"] = pfpLink
 }
 
 async function profilePicLoad(user){
   var storageRef = storage.ref();
   console.log(user + "/" + user + "pfp")
-  if (await storageRef.child(user + "/" + user + "pfp").getDownloadURL() == null){
-    var pfpLink = await storageRef.child("default/pfp.png").getDownloadURL()
-  }
-  else{
-  var pfpLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL()
-}
-  console.log(pfpLink)
-  document.getElementById("profileImage").src = pfpLink
+  //if (await storageRef.child(user + "/" + user + "pfp").getDownloadURL() == null){
+    //var pfpLink = await storageRef.child("default/pfp.png").getDownloadURL()
+  //}
+  //else{
+  //var pfpLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL()
+//}
+  //console.log(pfpLink)
+  document.getElementById("profileImage").src = cachedPfp
 }
 
 function hidePosts() {
@@ -790,30 +800,30 @@ const dd = await firebase.firestore().collection('events').doc(creator + name)
 }
 //
 
-function viewMyProfile() {
+async function viewMyProfile() {
   localStorage['userToView'] = myUser
   console.log(myUser)
-  window.location.href = "http://localhost:8000/profile.html";
+  window.location.href = "profile.html";
 }
 
 function viewThisProfile(param) {
   localStorage['userToView'] = param
-  window.location.href = "http://localhost:8000/profile.html"
+  window.location.href = "profile.html"
 }
 // Chat
 function viewMyFeed() {
-  window.location.href = "http://localhost:8000/realfeed.html";
+  window.location.href = "realfeed.html";
 }
 function viewMyProtests() {
-  window.location.href = "http://localhost:8000/protestfeed.html";
+  window.location.href = "protestfeed.html";
 }
 function viewSearch() {
-  window.location.href = "http://localhost:8000/index.html";
+  window.location.href = "index.html";
 }
 
 function backToLogin(){
   logout()
-  window.location.href = "http://localhost:8000/login_signup.html";
+  window.location.href = "login_signup.html";
 }
 
 function chooseProduct(){
@@ -828,7 +838,7 @@ if (isAProduct==false){
 
 }
 function toMarketplace(){
-  window.location.href = "http://localhost:8000/marketplace.html"
+  window.location.href = "marketplace.html"
 }
 
 async function retrieveMarketplace() {
@@ -1039,4 +1049,11 @@ async function unfollow() {
   bioref.update({
     bio: document.getElementById("bioInput").value
   })
+ }
+
+ function toCreateProtest(){
+  window.location.href = "createprotest.html";
+ }
+ function toCustomDesigner(){
+  window.location.href = "postermaker.html";
  }

@@ -23,7 +23,7 @@
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 </head>
 
-<body onload="myfunc(), profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons()">
+<body onload="myfunc(), profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons(), console.log(myUser)">
     <style>
         body{
             color: #124665;
@@ -44,8 +44,8 @@
   
     <!-- Left-aligned links (default) -->
     <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-    <a href="#contact" style="margin-right: 30%;">Contact</a>
-    <a href="#search">Search</a>
+    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 30%;">Organize an Event</a>
+    <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
   
     <!-- Right-aligned links -->
     <div class="topnav-right">
@@ -143,6 +143,11 @@
 
 <section class="nav">
 
+    <div class="icon" onclick="toMarketplace()" style="cursor: pointer;">
+      <i class="fas fa-shopping-cart"></i>
+      <p>Marketplace</p>
+
+    </div>
 
     <div class="icon" onclick="viewMyFeed()" style="cursor: pointer;">
       <i class="fas fa-fire"></i>
@@ -151,13 +156,13 @@
 
 
     <div class="icon" onclick="viewMyProtests()" style="cursor: pointer;">
-      <i class="fas fa-comment-dots"></i>
+      <i class="fas fa-user-friends"></i>
       <p>Protests</p>
     </div>
 
 
     <div class="icon" onclick="viewSearch()" style="cursor: pointer;">
-      <i class="fas fa-bell"></i>
+      <i class="fas fa-search"></i>
       <p>Search</p>
     </div> 
 
@@ -168,7 +173,6 @@
 
     </div>
   </section>
-
 <!-- End of container -->
 <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
 <script>
@@ -196,9 +200,10 @@
   var storageRef = storage.ref(myUser + '/' + myUser + "pfp");
   storageRef.put(file); 
 })
+
 </script>
 <script src="app.js">
-
+console.log(myUser + "heifndis")
 </script>
 </body>
 </html>
