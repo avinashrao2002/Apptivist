@@ -6,7 +6,11 @@ totalPosts = 0
 var myUser = localStorage['myUser'] || 'N/A';
 var userToView = localStorage['userToView'] || myUser;
 var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+
+
 var isAProduct = false
+
+
 
 function checkIfLoggedIn(){
   if (typeof localStorage['myUser'] == undefined || localStorage['myUser'] == "N/A") {
@@ -29,7 +33,8 @@ async function test() {
     bio: "I am new to Apptivist!",
     pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55",
     followers: [document.getElementById("field6").value],
-    following: [document.getElementById("field6").value]
+    following: [document.getElementById("field6").value],
+    postNumber: 0
 
   };
   
@@ -63,14 +68,17 @@ async function createPost(link,num,tex){
   n = d.getTime()
   var storageRef = storage.ref();
 
-  var pfpLink = await storageRef.child(myUser + "/" + myUser + "pfp").getDownloadURL()
+  var pfpLink = await storageRef.child(myUser + "/" + myUser + "pfp").getDownloadURL().catch(async function handl() {
+    buzz = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
+
+  })
   let data = {
     imageLink: link,
     postNumber: num,
     text: tex,
     handle: myUser,
     created: n/1000,
-    pfp: pfpLink,
+    pfp: pfpLink || buzz,
     isProduct: isAProduct,
     likes: [myUser]
   }
@@ -350,7 +358,7 @@ const ref = await firebase.firestore().collection('users').doc(user2Follow).coll
 async function retrieveFeed() {
   var allPosts = []
   var timestampArray = []
-  const snapFollow = await firebase.firestore().collection('users').doc(myUser).collection("following").doc("following").get()
+  const snapFollow = await firebase.firestore().collection('users').doc(myUser).get()
   const followingArray = snapFollow.data().following
 console.log(followingArray)
 
@@ -755,14 +763,17 @@ async function updatePfp(user){
 async function profilePicLoad(user){
   var storageRef = storage.ref();
   console.log(user + "/" + user + "pfp")
-  //if (await storageRef.child(user + "/" + user + "pfp").getDownloadURL() == null){
-    //var pfpLink = await storageRef.child("default/pfp.png").getDownloadURL()
-  //}
-  //else{
-  //var pfpLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL()
-//}
-  //console.log(pfpLink)
-  document.getElementById("profileImage").src = cachedPfp
+ 
+
+  var importantLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL().catch(async function handl() {
+    cool = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
+
+  })
+ 
+
+  
+  console.log(cool)
+  document.getElementById("profileImage").src = importantLink || cool
 }
 
 function hidePosts() {
