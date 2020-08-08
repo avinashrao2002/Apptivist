@@ -492,7 +492,7 @@ const ref = await firebase.firestore().collection('posts').doc(user + postNumber
     console.log("already exists")}
   else {
   ref.update({
-    likers: firebase.firestore.FieldValue.arrayUnion(myUser)
+    likes: firebase.firestore.FieldValue.arrayUnion(myUser)
   })
 }
 
