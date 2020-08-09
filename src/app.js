@@ -1,6 +1,6 @@
 /* global algoliasearch instantsearch */
 
-
+var tester = '{{newData.pfp}}' || '{{data.pfp}}'
 const searchClient = algoliasearch(
   '9ZEA531BWY',
   'c9267065d4155f6887511396ad1d7669'

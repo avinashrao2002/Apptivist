@@ -53,7 +53,7 @@ background-color: #EAEEED;
         color: black;
     }
     </style>
-<body onload = "hideProtest()">
+<body>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
@@ -74,7 +74,7 @@ type="text/css"
     </div>
   
     <!-- Left-aligned links (default) -->
-    <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
+    <a href="#news" onclick="viewMyFeed(), showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
     <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 30%;">Organize an Event</a>
     <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
   
@@ -113,7 +113,7 @@ type="text/css"
     <br>
 
     <div style="display: inline;">
-    <button onclick="makeProtest('avinash_rao05')" class = "buttoncolor, myRealButtons" style="color: black;" >Make your protest!</button> 
+    <button onclick="makeProtest(myUser)" class = "buttoncolor, myRealButtons" style="color: black;" >Make your protest!</button> 
     <button onclick="hideProtest()" class = "buttoncolor , myRealButtons" >Cancel</button>  
     </div>
     <br>

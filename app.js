@@ -38,7 +38,14 @@ async function test() {
 
   };
   
+var errorDetermine = await db.collection('users').where("userName", "==", document.getElementById("field6").value).get()
+var fmap = errorDetermine.docs.map(doc => doc.data())
+console.log(fmap)
 
+if (fmap.length>0) {
+  window.alert("That username is already taken, sorry!")
+  return "broke"
+}
   // Add a new document in collection "cities" with ID 'LA'
   db.collection('users').doc(document.getElementById("field6").value).set(data);
   
@@ -54,7 +61,7 @@ async function test() {
   });  
   localStorage["myUser"] = data.userName
   localStorage["cachedPfp"] = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
-  window.location.href = "welcome.html";
+
 }
 function hidePostBox(){
   
@@ -459,6 +466,8 @@ var picCell = newRow.insertCell(1);
 
 var newText  = document.createTextNode(caption);
 var likesDiv = document.createElement("div")
+newLikes.id = handle + String(postNumber)
+console.log(newLikes.id)
 likesDiv.appendChild(likeButton)
 likesDiv.appendChild(countLikes)
 likesDiv.appendChild(document.createTextNode(" Likes"))
@@ -503,7 +512,7 @@ const ref = await firebase.firestore().collection('posts').doc(user + postNumber
     likes: firebase.firestore.FieldValue.arrayUnion(myUser)
   })
 }
-
+document.getElementById(user + String(postNumber)).value = "4004"
 }
 
 async function likeNumber(user, postNumber){
@@ -548,18 +557,13 @@ function makeProtest(user){
     startDate: startdate(),
     endDate: enddate(),
     created: new Date().getTime()/1000,
-    tags: ["no tags right now!"]
+    tags: ["no tags right now!"],
+    going: [myUser],
+    interested: [myUser]
 
   }
   db.collection("events").doc(user + document.getElementById("protestName").value).set(data)
-  db.collection("events").doc(user + document.getElementById("protestName").value).collection("interested").doc("interested").set({
-    interested: [user],
 
-  })
-  db.collection("events").doc(user + document.getElementById("protestName").value).collection("going").doc("going").set({
-    going: [user],
-
-  })
 }
 
 var userLat = 0
@@ -764,7 +768,7 @@ async function profilePicLoad(user){
   var storageRef = storage.ref();
   console.log(user + "/" + user + "pfp")
  
-
+  var cool = "none"
   var importantLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL().catch(async function handl() {
     cool = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
 
