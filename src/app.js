@@ -31,7 +31,7 @@ search.addWidgets([
   {{#helpers.highlight}}{ "attribute": "newData.lastName" }{{/helpers.highlight}}</p>
   <p style = "margin-left: 30px;">{{#helpers.highlight}}{ "attribute": "data.firstName" }{{/helpers.highlight}}
   {{#helpers.highlight}}{ "attribute": "data.lastName" }{{/helpers.highlight}}</p>
-  <img style = "margin-left: 30px; margin-top: 20px;" src ={{newData.pfp}} width ="100" height ="100">
+  <img style = "margin-left: 30px; margin-top: 20px;" src ={{newData.pfp}} width ="100px" height ="auto">
 </article>
 `,
     },

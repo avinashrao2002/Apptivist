@@ -44,7 +44,7 @@
   
     <!-- Left-aligned links (default) -->
     <a href="#news" onclick="viewMyFeed(), showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 30%;">Organize an Event</a>
+    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 15%;">Organize an Event</a>
     <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
   
     <!-- Right-aligned links -->
@@ -54,7 +54,73 @@
     </div>
   
   </div>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div style="display: inline;">
+    <p style="display: inline;">Following</p> 
+    <div class="icon"  style="cursor: pointer; display: inline;">
+      <i class="fas fa-check"></i>
+    </div>
+  </div>
+  </div>
+
+</div>
+<div id="unfollowModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div style="display: inline;">
+    <p style="display: inline;">Unfollowed</p> 
+    <div class="icon"  style="cursor: pointer; display: inline;">
+      <i class="fas fa-check"></i>
+    </div>
+  </div>
+  </div>
+
+</div>
+<div id="followersModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 1000px; height: 1000px;">
+    <span class="close">&times;</span>
+    <div style="display: inline; ">
+      <table id="followersTable">
+        <tr>
+
+        </tr>
+
+      </table>
+    </div>
+  </div>
+  </div>
+
+</div>
+<div id="followingModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content" style="width: 1000px; height: 1000px;">
+    <span class="close">&times;</span>
+    <div style="display: inline; ">
+      <table id="followingTable">
+        <tr>
+
+        </tr>
+
+      </table>
+    </div>
+  </div>
+  </div>
+
+</div>
 <div style="text-align: center;">
+  
  
     <div class="profile">
 
@@ -88,16 +154,16 @@
     <span style="display: inline;">
        
 
- <p id="countFollowers" style="display: inline;">0 followers</p>
+ <p id="countFollowers" style="display: inline; cursor: pointer;" onclick="showFollowers()">0 followers</p>
  <p style="display: inline;">|</p>
- <p id="countFollowing" style="display: inline;">0 following</p>
+ <p id="countFollowing" style="display: inline; cursor: pointer;">0 following</p>
  <button class="btn profile-settings-btn" aria-label="profile settings" onclick="editUser()"><i class="fas fa-cog" aria-hidden="true"></i></button>
  
 </span>
 </div>
         </div>
         <div style="display: inline;">
-<button class="myRealButtons" id="follow" style="color: #EAEEED; background-color: #124665; display: none;" onclick="follow()">Follow</button>
+<button class="myRealButtons" id="follow" style="color: #EAEEED; background-color: #124665; display: none;" onclick="follow(), changeText()">Follow</button>
         <button class="myRealButtons" id="unfollow" style="color: #EAEEED; background-color: #124665; margin-bottom: 20px; display: none;" onclick="unfollow()">Unfollow</button>
     </div>
         <div class="profile-bio" >
@@ -118,7 +184,7 @@
 
 </div>
 
-    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; margin-left:280px ;" >
+    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; margin-left:  20.25%;" >
 
         <tbody>
             <tr>
@@ -129,7 +195,7 @@
     </table>
 
     <div id ="as" style=" color: #EAEEED;">
-        <table id="protestsTable" class="myTable, center" style="margin-left:300px" >
+        <table id="protestsTable" class="myTable, center" style="margin-left:21.5%" >
     
             <tbody>
                 <tr>

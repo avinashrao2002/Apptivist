@@ -244,7 +244,14 @@ async function retrieveMyPosts(user){
       for(q=0;q<dictionaryArray.length;q++){
         //var userData = await db.collection("users").doc(user).get()
         //var linktopfp = userData.data().pfp
-      addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length)
+        if (dictionaryArray[q].key.likes.includes(myUser)){
+          btnColor = "#EAC2C2"
+        }
+        else {
+          btnColor = "#EAEEED"
+        }
+
+      addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
       }
       
     }
@@ -401,8 +408,13 @@ console.log(followingArray)
 console.log(dictionaryArray)
   if (sortingArray.length == followingArray.length) {
     for(q=0;q<dictionaryArray.length;q++){
-  
-    addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length)
+      if (dictionaryArray[q].key.likes.includes(myUser)){
+        btnColor = "#EAC2C2"
+      }
+      else {
+        btnColor = "#EAEEED"
+      }
+    addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
     }
     
   }
@@ -412,7 +424,7 @@ console.log(dictionaryArray)
 
 
 
- async function addToTable(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes){
+ async function addToTable(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color){
   d = new Date()
   n = d.getTime()
   var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
@@ -448,6 +460,10 @@ followButton.innerHTML = "Follow Me"
 followButton.onclick =  function _ (){
   followUser(handle)
 }
+
+likeButton.style.backgroundColor = color
+likeButton.id = handle + String(postNumber)
+console.log(likeButton.id)
 likeButton.innerHTML = "Like"
 likeButton.onclick = function __ (){
   likePost(handle, postNumber)
@@ -466,8 +482,8 @@ var picCell = newRow.insertCell(1);
 
 var newText  = document.createTextNode(caption);
 var likesDiv = document.createElement("div")
-newLikes.id = handle + String(postNumber)
-console.log(newLikes.id)
+
+
 likesDiv.appendChild(likeButton)
 likesDiv.appendChild(countLikes)
 likesDiv.appendChild(document.createTextNode(" Likes"))
@@ -480,6 +496,7 @@ newCell.appendChild(picandhandlediv)
 newCell.appendChild(document.createElement("hr"));
 newCell.appendChild(textDiv);
 newCell.appendChild(likesDiv);
+
 
 
 likeButton.classList.add("myRealButtons")
@@ -512,7 +529,7 @@ const ref = await firebase.firestore().collection('posts').doc(user + postNumber
     likes: firebase.firestore.FieldValue.arrayUnion(myUser)
   })
 }
-document.getElementById(user + String(postNumber)).value = "4004"
+document.getElementById(user + String(postNumber)).style.backgroundColor = "#EAC2C2"
 }
 
 async function likeNumber(user, postNumber){
@@ -750,17 +767,21 @@ async function updatePfp(user){
  
 
   var pfpLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL()
+    er = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+
+
   data = {
-    pfp: pfpLink
+    pfp: pfpLink || er
   }
 
   fbru = await db.collection("users").doc(user).update(data)
   userMap = await db.collection("posts").where("handle", "==", user).get()
   userArray = userMap.docs.map(doc => doc.data())
   console.log(userArray)
-  for(q=1;q<userArray.length;q++){
+  for(q=1;q<userArray.length + 1;q++){
   db.collection('posts').doc(user + String(q)).update(data)
   }
+  console.log("we did it")
   localStorage["cachedPfp"] = pfpLink
 }
 
@@ -888,8 +909,13 @@ console.log(allProducts)
 console.log(dictionaryArray)
 
     for(q=0;q<dictionaryArray.length;q++){
-  
-    addToMarket(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length)
+      if (dictionaryArray[q].key.likes.includes(myUser)){
+        btnColor = "#EAC2C2"
+      }
+      else {
+        btnColor = "#EAEEED"
+      }
+    addToMarket(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
     }
     
   
@@ -899,7 +925,7 @@ console.log(dictionaryArray)
 
 
 
- async function addToMarket(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes){
+ async function addToMarket(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color){
   d = new Date()
   n = d.getTime()
   var tableRef = document.getElementById('myMarket').getElementsByTagName('tbody')[0];
@@ -933,6 +959,8 @@ followButton.onclick =  function _ (){
   followUser(handle)
 }
 likeButton.innerHTML = "Like"
+likeButton.id = handle + String(postNumber)
+likeButton.style.backgroundColor = color
 likeButton.onclick = function __ (){
   likePost(handle, postNumber)
 }
@@ -965,8 +993,10 @@ newCell.appendChild(likesDiv);
 
 
 likeButton.classList.add("myRealButtons")
+likeButton.style.marginRight = "10px"
+likeButton.style.marginLeft = "40px"
 listLikeButton.classList.add("myRealButtons")
-
+listLikeButton.style.marginLeft = "10px"
 var img = document.createElement("img")
 img.src = imgSource
 picCell.appendChild(img)
@@ -1011,12 +1041,14 @@ async function follow() {
   else{
     myUserRef.update({
       following: firebase.firestore.FieldValue.arrayUnion(userToView)
-    })
+    }) 
+
   }
 
 }
 
 async function unfollow() {
+
   var unfollowThisUser = await db.collection("users").doc(userToView).get()
   var unfollowRef = await db.collection("users").doc(userToView)
   var unfollowerList = unfollowThisUser.data().followers
@@ -1036,12 +1068,14 @@ async function unfollow() {
     removeRef.update({   
       following: firebase.firestore.FieldValue.arrayRemove(userToView)
     })
+
    
   }
   else{
     console.log("they weren't in your list anyways")
   }
   
+ 
 }
  async function buttons() {
    dat = await db.collection("users").doc(myUser).get()
@@ -1076,4 +1110,153 @@ async function unfollow() {
  function findProfile(){
   localStorage["userToView"] = myUser
   window.location.href = "profile.html";
+}
+
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("follow");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  follow()
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+var unfollowModal = document.getElementById("unfollowModal");
+
+// Get the button that opens the modal
+var unfollowbtn = document.getElementById("unfollow");
+
+// Get the <span> element that closes the modal
+var unfollowspan = document.getElementsByClassName("close")[1];
+
+// When the user clicks on the button, open the modal
+unfollowbtn.onclick = function() {
+  unfollow()
+  unfollowModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+unfollowspan.onclick = function() {
+  unfollowModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == unfollowModal) {
+    unfollowModal.style.display = "none";
+  }
+}
+
+var followersModal = document.getElementById("followersModal");
+
+// Get the button that opens the modal
+var followersBtn = document.getElementById("countFollowers");
+
+// Get the <span> element that closes the modal
+var followersSpan = document.getElementsByClassName("close")[2];
+
+// When the user clicks on the button, open the modal
+followersBtn.onclick = function() {
+  showFollowers()
+  followersModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+followersSpan.onclick = function() {
+  followersModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == followersModal) {
+    followersModal.style.display = "none";
+  }
+}
+
+async function showFollowers(){
+  var intended  = await db.collection("users").doc(userToView).get()
+  var intendedarray = intended.data().followers
+  for(q=0;q<intendedarray.length;q++){
+  followersTable(intendedarray[q])
+  }
+}
+
+async function followersTable(user) {
+  var tableRef = document.getElementById('followersTable').getElementsByTagName('tbody')[0];
+  var newRow   = tableRef.insertRow();
+  var newCell  = newRow.insertCell(0);
+  containerDiv = document.createElement("div")
+  containerDiv.appendChild(document.createTextNode(user))
+  newCell.appendChild(containerDiv)
+  containerDiv.onclick = function (){
+    viewThisProfile(user)
+  }
+  containerDiv.style.cursor = "pointer"
+
+}
+async function showFollowing(){
+  var intendedd  = await db.collection("users").doc(userToView).get()
+  var intendeddarray = intendedd.data().following
+  for(q=0;q<intendeddarray.length;q++){
+  followingTable(intendeddarray[q])
+  }
+}
+
+async function followingTable(user) {
+  var tableRef = document.getElementById('followingTable').getElementsByTagName('tbody')[0];
+  var newRow   = tableRef.insertRow();
+  var newCell  = newRow.insertCell(0);
+  containerDiv = document.createElement("div")
+  containerDiv.appendChild(document.createTextNode(user))
+  newCell.appendChild(containerDiv)
+  containerDiv.onclick = function (){
+    viewThisProfile(user)
+  }
+  containerDiv.style.cursor = "pointer"
+
+}
+var followingModal = document.getElementById("followingModal");
+
+// Get the button that opens the modal
+var followingBtn = document.getElementById("countFollowing");
+
+// Get the <span> element that closes the modal
+var followingSpan = document.getElementsByClassName("close")[3];
+
+// When the user clicks on the button, open the modal
+followingBtn.onclick = function() {
+  showFollowing()
+  followingModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+followingSpan.onclick = function() {
+  followingModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == followingModal) {
+    followignModal.style.display = "none";
+  }
+}
+function changeText(){
+  document.getElementById("follow").innerHTML = "Unfollow"
 }
