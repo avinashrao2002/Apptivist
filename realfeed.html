@@ -14,7 +14,7 @@
   <title id>Apptivist</title>
 </head>
 
-<body onload = "checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
+<body onload = "preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
 <!-- Top navigation -->
 <div class="topnav">
 
@@ -37,7 +37,23 @@
   </div>
 
 </div>
+<div id="imageModal" class="modal">
 
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div style="display: inline;">
+      <div id="popup">
+
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+</div>
+<div id="hhh"></div>
+<button id="fuck">fffff</button>
 <div id="makePost" style="margin-top: 20px; text-align: center; display: none;" >
   <div style="display: inline;">
     <label for="caption" style="margin-right: 20px; color: black;">Give your post a nice caption</label><input type="text" name="caption" id="postText" class="postText" style="width: 600px; height: 50px; border-radius: 20px;">

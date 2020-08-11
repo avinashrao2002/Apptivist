@@ -140,7 +140,7 @@ function create_user(){
 firebase.auth().onAuthStateChanged(async function(user) {
     if (user) {
       // User is signed in.
-  
+
       document.getElementById("create_account").style.display = "block";
       document.getElementById("user_div").style.display = "block";
       document.getElementById("login_div").style.display = "none";
@@ -428,7 +428,19 @@ console.log(dictionaryArray)
   d = new Date()
   n = d.getTime()
   var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
-  var timeInfo = document.createTextNode(new Date(timestamp*1000).toUTCString())
+  var reformattedDate = new Date((timestamp-25200)*1000).toUTCString()
+  var indicator = " AM"
+  var hour = parseInt((reformattedDate.slice(17,19)))
+  if (parseInt(reformattedDate.slice(17,19)) >= 12){
+    indicator = " PM"
+    hour = hour - 12
+    console.log(hour)
+  } 
+  reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
+  var timeInfo = document.createTextNode(reformattedDate)
+
+  
+  
 
 
 // Insert a row in the table at the last row
@@ -503,12 +515,19 @@ likeButton.classList.add("myRealButtons")
 listLikeButton.classList.add("myRealButtons")
 
 var img = document.createElement("img")
+
 img.src = imgSource
+
+
 picCell.appendChild(img)
 img.classList.add("image")
 
 //picCell.classList.add("card")
 picCell.classList.add("picture")
+img.onclick = function(){
+  window.open(imgSource, "_blank")
+}
+img.style.cursor = "pointer"
 newCell.classList.add("card")
 profileImage.classList.add("profile-pic")
 }
@@ -786,19 +805,11 @@ async function updatePfp(user){
 }
 
 async function profilePicLoad(user){
-  var storageRef = storage.ref();
-  console.log(user + "/" + user + "pfp")
- 
-  var cool = "none"
-  var importantLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL().catch(async function handl() {
-    cool = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
 
-  })
  
-
+  console.log('lol')
   
-  console.log(cool)
-  document.getElementById("profileImage").src = importantLink || cool
+
 }
 
 function hidePosts() {
@@ -1001,7 +1012,10 @@ var img = document.createElement("img")
 img.src = imgSource
 picCell.appendChild(img)
 img.classList.add("image")
-
+img.onclick = function(){
+  window.open(imgSource, "_blank")
+}
+img.style.cursor = "pointer"
 //picCell.classList.add("card")
 picCell.classList.add("picture")
 newCell.classList.add("card")
@@ -1015,7 +1029,11 @@ function editUser(){
 }
 
 async function getUserData() {
+  var storageRef = storage.ref();
+  var cool = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
   userD = await db.collection("users").doc(userToView).get()
+  
+  document.getElementById("profileImage").src = userD.data().pfp || cool
   document.getElementById("bio").innerText = userD.data().bio
   document.getElementById("countFollowers").innerText = userD.data().followers.length + " followers"
   document.getElementById("countFollowing").innerText = userD.data().following.length + " following"
@@ -1260,3 +1278,56 @@ window.onclick = function(event) {
 function changeText(){
   document.getElementById("follow").innerHTML = "Unfollow"
 }
+
+async function preventHacking(){
+  firebase.auth().onAuthStateChanged(async function(user) {
+    if (user) {
+      var email = await firebase.auth().currentUser.email
+      console.log(email)
+      var document = await db.collection("users").doc(myUser).get()
+      var emailCheck = document.data().email
+      if (emailCheck != email){
+        logout()
+      }
+      console.log("you are logged in")
+      
+    }
+  });
+  
+  
+}
+/*
+var imgModal = document.getElementById("imageModal");
+
+// Get the button that opens the modal
+var imgBtn = document.getElementById("fuck");
+
+// Get the <span> element that closes the modal
+var imgSpan = document.getElementsByClassName("close")[5];
+
+// When the user clicks on the button, open the modal
+imgBtn.onclick = function() {
+  clickOnImage(myUser,1)
+  imgModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+imgSpan.onclick = function() {
+  imgModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == imgModal) {
+    imgModal.style.display = "none";
+  }
+}
+
+async function clickOnImage(user, postNumber){
+
+// When the user clicks anywhere outside of the modal, close it
+
+  document.getElementById("modalimg" + user + String(postNumber)).style.display = "inline"
+  console.log("done")
+}
+*/
