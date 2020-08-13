@@ -121,6 +121,25 @@
   </div>
 
 </div>
+<div id="commentsModal" class="modal" style="color:#124665;">
+
+  <!-- Modal content -->
+  <div class="modal-content" style=" width: 100%; height: auto;">
+    <span class="close">&times;</span>
+
+  <table id="commentsTable">
+    <tbody>
+
+    </tbody>
+  </table>
+<input type="text" name="" id="comment" style = "color:#124665">
+<button onclick="makeAComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px;" id="submitComment"> Comment </button>
+Refresh to see your comment/like
+  </div>
+
+</div>
+
+
 <div style="text-align: center;">
   
  
@@ -185,8 +204,8 @@
 </div>
 
 </div>
-
-    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; margin-left:  20.25%;" >
+<div >
+    <table id="myTable" class="myTable, center" align="center" style="padding-bottom: 100px; color: #EAEEED; position: relative; margin-left: 20.25%" >
 
         <tbody>
             <tr>
@@ -207,7 +226,7 @@
      </table>    
 
 </div>
-
+</div>
 
 <section class="nav">
 
@@ -268,6 +287,32 @@
   var storageRef = storage.ref(myUser + '/' + myUser + "pfp");
   storageRef.put(file); 
 })
+
+console.log('what')
+var commentsModal = document.getElementById("commentsModal");
+
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var commentspan = document.getElementsByClassName("close")[4];
+
+// When the user clicks on the button, open the modal
+
+// When the user clicks on <span> (x), close the modal
+commentspan.onclick = function() {
+  commentsModal.style.display = "none";
+  for (x=0; x<localStorage["tableRowCount"]; x++){
+    document.getElementById("commentsTable").deleteRow(0)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == commentsModal) {
+    commentsModal.style.display = "none";
+  }
+}
 
 </script>
 <script src="app.js">

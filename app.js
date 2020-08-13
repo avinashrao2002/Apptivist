@@ -75,7 +75,7 @@ async function createPost(link,num,tex){
   n = d.getTime()
   var storageRef = storage.ref();
 
-  var pfpLink = await storageRef.child(myUser + "/" + myUser + "pfp").getDownloadURL().catch(async function handl() {
+  var pfpLink = await storageRef.child(myUser + "/" + myUser + "pfp" + "_400x400").getDownloadURL().catch(async function handl() {
     buzz = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
 
   })
@@ -98,7 +98,7 @@ async function submitPost() {
   var storageRef = storage.ref();
 
   console.log("In submit post, total posts is " + totalPosts)
-  await storageRef.child(myUser + '/' + myUser + String(totalPosts + 1)).getDownloadURL().then(function(url) {
+  await storageRef.child(myUser + '/' + myUser + String(totalPosts + 1) + "_400x400").getDownloadURL().then(function(url) {
   var imageLink = url  
   console.log('this far')
   console.log(url)
@@ -251,7 +251,7 @@ async function retrieveMyPosts(user){
           btnColor = "#EAEEED"
         }
 
-      addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
+      addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor, dictionaryArray[q].key)
       }
       
     }
@@ -414,7 +414,7 @@ console.log(dictionaryArray)
       else {
         btnColor = "#EAEEED"
       }
-    addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
+    addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor, dictionaryArray[q].key)
     }
     
   }
@@ -424,9 +424,10 @@ console.log(dictionaryArray)
 
 
 
- async function addToTable(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color){
+ async function addToTable(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color, data){
   d = new Date()
   n = d.getTime()
+
   var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
   var reformattedDate = new Date((timestamp-25200)*1000).toUTCString()
   var indicator = " AM"
@@ -434,7 +435,7 @@ console.log(dictionaryArray)
   if (parseInt(reformattedDate.slice(17,19)) >= 12){
     indicator = " PM"
     hour = hour - 12
-    console.log(hour)
+
   } 
   reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
   var timeInfo = document.createTextNode(reformattedDate)
@@ -444,17 +445,31 @@ console.log(dictionaryArray)
 
 
 // Insert a row in the table at the last row
+
 var newRow   = tableRef.insertRow();
 var pfpText = document.createTextNode(handle)
 var profileImage = document.createElement("img")
 var followButton = document.createElement("button")
 var likeButton = document.createElement("button")
-var countLikes = document.createTextNode(newLikes)
 var listLikeButton = document.createElement("button")
 var picandhandlediv = document.createElement("div")
 var textDiv = document.createElement("div")
 var spanDiv = document.createElement("span")
+var commentsButton = document.createElement("button")
+commentsButton.innerHTML = "View Comments"
+commentsButton.classList.add("myRealButtons")
+
+commentsButton.onclick = function(){
+
+  readComments(handle, postNumber, data)
+  commentsModal.style.display = "block";
+  document.getElementById("comment").style.display = "block"
+  document.getElementById("submitComment").style.display = "block"
+}
 spanDiv.classList.add("spanForText")
+
+listLikeButton.innerHTML = newLikes + " &hearts;"
+listLikeButton.style.backgroundColor = "#124665"
 
 picandhandlediv.appendChild(profileImage)
 picandhandlediv.appendChild(document.createTextNode("@"))
@@ -474,19 +489,25 @@ followButton.onclick =  function _ (){
 }
 
 likeButton.style.backgroundColor = color
+
 likeButton.id = handle + String(postNumber)
 console.log(likeButton.id)
 likeButton.innerHTML = "Like"
 likeButton.onclick = function __ (){
   likePost(handle, postNumber)
+  
 }
-listLikeButton.innerHTML = "View Likers"
+listLikeButton.style.color = "#EAEEED"
 listLikeButton.onclick = function ___ () {
-  likeList(handle,postNumber)
+  newLikeList(handle,postNumber, data)
+  commentsModal.style.display = "block";
+  document.getElementById("comment").style.display = "None"
+  document.getElementById("submitComment").style.display = "None"
 }
 //followButton.onclick = followUser(handle)
 
 // Insert a cell in the row at index 0
+
 var newCell  = newRow.insertCell(0);
 var picCell = newRow.insertCell(1);
 // Append a text node to the cell
@@ -494,12 +515,12 @@ var picCell = newRow.insertCell(1);
 
 var newText  = document.createTextNode(caption);
 var likesDiv = document.createElement("div")
-
+likesDiv.style.display = "inline"
 
 likesDiv.appendChild(likeButton)
-likesDiv.appendChild(countLikes)
-likesDiv.appendChild(document.createTextNode(" Likes"))
 likesDiv.appendChild(listLikeButton)
+likesDiv.appendChild(commentsButton)
+
 spanDiv.appendChild(newText)
 textDiv.appendChild(spanDiv)
 textDiv.classList.add("scrollPosts")
@@ -508,8 +529,25 @@ newCell.appendChild(picandhandlediv)
 newCell.appendChild(document.createElement("hr"));
 newCell.appendChild(textDiv);
 newCell.appendChild(likesDiv);
+if (myUser == handle){
+  var deletediv = document.createElement("div")
+  deletediv.style.color = "white"
+  deletediv.style.fontSize = "10px"
+  deletediv.style.marginLeft = "20px"
+  deletediv.style.marginTop = "20px"
+  deletediv.style.cursor = "pointer"
+  deletediv.innerHTML = "&#x26D4; Delete Post"
+  console.log("this far")
+  deletediv.onclick = function(){
+    deletePost(handle, postNumber)
+  }
+  newCell.appendChild(deletediv)
+  }
+likeButton.style.marginRight = "0px"
 
+listLikeButton.style.marginRight = "0px"
 
+commentsButton.style.marginRight = "0px"
 
 likeButton.classList.add("myRealButtons")
 listLikeButton.classList.add("myRealButtons")
@@ -530,6 +568,7 @@ img.onclick = function(){
 img.style.cursor = "pointer"
 newCell.classList.add("card")
 profileImage.classList.add("profile-pic")
+likesDiv.style.marginTop = "0px"
 }
 //following System
 
@@ -655,7 +694,15 @@ async function addToProtests(name, description, handle, pfp, startDate, endDate,
 // Insert a row in the table at the last row
 var newRow   = tableRef.insertRow();
 var pfpText = document.createTextNode(handle)
+pfpText.onclick = function(){
+  viewThisProfile(handle)
+}
+
 var profileImage = document.createElement("img")
+profileImage.onclick = function(){
+  viewThisProfile(handle)
+}
+profileImage.style.cursor = "pointer"
 var wordLocation = null
 var titleDiv = document.createElement("div")
 profileImage.src = pfp
@@ -785,7 +832,7 @@ async function updatePfp(user){
 
  
 
-  var pfpLink = await storageRef.child(user + "/" + user + "pfp").getDownloadURL()
+  var pfpLink = await storageRef.child(user + "/" + user + "pfp" +"_400x400").getDownloadURL()
     er = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
 
 
@@ -926,7 +973,7 @@ console.log(dictionaryArray)
       else {
         btnColor = "#EAEEED"
       }
-    addToMarket(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor)
+    addToMarket(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor, dictionaryArray[q].key)
     }
     
   
@@ -936,7 +983,7 @@ console.log(dictionaryArray)
 
 
 
- async function addToMarket(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color){
+ async function addToMarket(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color, data){
   d = new Date()
   n = d.getTime()
   var tableRef = document.getElementById('myMarket').getElementsByTagName('tbody')[0];
@@ -949,16 +996,30 @@ var pfpText = document.createTextNode(handle)
 var profileImage = document.createElement("img")
 var followButton = document.createElement("button")
 var likeButton = document.createElement("button")
-var countLikes = document.createTextNode(newLikes)
 var listLikeButton = document.createElement("button")
 var picandhandlediv = document.createElement("div")
 var textDiv = document.createElement("div")
 var spanDiv = document.createElement("span")
+var commentsButton = document.createElement("button")
+commentsButton.innerHTML = "View Comments"
+commentsButton.classList.add("myRealButtons")
+commentsButton.onclick = function(){
+
+  readComments(handle, postNumber, data)
+  commentsModal.style.display = "block";
+  document.getElementById("comment").style.display = "block"
+  document.getElementById("submitComment").style.display = "block"
+}
 spanDiv.classList.add("spanForText")
 
 picandhandlediv.appendChild(profileImage)
 picandhandlediv.appendChild(document.createTextNode("@"))
 picandhandlediv.appendChild(pfpText)
+
+picandhandlediv.onclick = function(){
+  viewThisProfile(handle)
+}
+picandhandlediv.style.cursor = "pointer"
 
 var datediv = document.createElement("div")
 datediv.appendChild(timeInfo)
@@ -975,9 +1036,14 @@ likeButton.style.backgroundColor = color
 likeButton.onclick = function __ (){
   likePost(handle, postNumber)
 }
-listLikeButton.innerHTML = "View Likers"
+listLikeButton.innerHTML = newLikes + " &hearts;"
+listLikeButton.style.backgroundColor = "#124665"
+listLikeButton.style.color = "white"
 listLikeButton.onclick = function ___ () {
-  likeList(handle,postNumber)
+  newLikeList(handle,postNumber, data)
+  commentsModal.style.display = "block";
+  document.getElementById("comment").style.display = "None"
+  document.getElementById("submitComment").style.display = "None"
 }
 //followButton.onclick = followUser(handle)
 
@@ -989,10 +1055,10 @@ var picCell = newRow.insertCell(1);
 
 var newText  = document.createTextNode(caption);
 var likesDiv = document.createElement("div")
+likesDiv.style.display = "inline"
 likesDiv.appendChild(likeButton)
-likesDiv.appendChild(countLikes)
-likesDiv.appendChild(document.createTextNode(" Likes"))
 likesDiv.appendChild(listLikeButton)
+likesDiv.appendChild(commentsButton)
 spanDiv.appendChild(newText)
 textDiv.appendChild(spanDiv)
 textDiv.classList.add("scrollPosts")
@@ -1001,13 +1067,28 @@ newCell.appendChild(picandhandlediv)
 newCell.appendChild(document.createElement("hr"));
 newCell.appendChild(textDiv);
 newCell.appendChild(likesDiv);
-
+if (myUser == handle){
+var deletediv = document.createElement("div")
+deletediv.style.color = "white"
+deletediv.style.fontSize = "10px"
+deletediv.style.marginLeft = "20px"
+deletediv.style.marginTop = "20px"
+deletediv.style.cursor = "pointer"
+deletediv.innerHTML = "&#x26D4; Delete Post"
+console.log("this far")
+deletediv.onclick = function(){
+  deletePost(handle, postNumber)
+}
+newCell.appendChild(deletediv)
+}
 
 likeButton.classList.add("myRealButtons")
-likeButton.style.marginRight = "10px"
-likeButton.style.marginLeft = "40px"
+
 listLikeButton.classList.add("myRealButtons")
-listLikeButton.style.marginLeft = "10px"
+likeButton.style.marginRight = "0px"
+listLikeButton.style.marginRight = "0px"
+commentsButton.style.marginRight = "0px"
+
 var img = document.createElement("img")
 img.src = imgSource
 picCell.appendChild(img)
@@ -1295,6 +1376,33 @@ async function preventHacking(){
   });
   
   
+
+}
+console.log('what')
+var commentsModal = document.getElementById("commentsModal");
+
+// Get the button that opens the modal
+var commentbtn = document.getElementById("tga");
+
+// Get the <span> element that closes the modal
+var commentspan = document.getElementsByClassName("close")[4];
+
+// When the user clicks on the button, open the modal
+commentbtn.onclick = function() {
+  console.log("hellp")
+  commentsModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+commentspan.onclick = function() {
+  commentsModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == commentsModal) {
+    commentsModal.style.display = "none";
+  }
 }
 /*
 var imgModal = document.getElementById("imageModal");
@@ -1331,3 +1439,83 @@ async function clickOnImage(user, postNumber){
   console.log("done")
 }
 */
+
+async function readComments(user, postNumber, data) {
+
+  localStorage['userComment'] = user + String(postNumber)
+ 
+  if (data.comments != undefined){
+    var doc = data.comments
+    var count = 0
+  for (x=0; x<doc.length; x++){
+    addToCommentsTable(doc[x])
+    count = count + 1
+    console.log(count)
+  }
+localStorage['tableRowCount'] = count
+
+console.log(document.getElementById("commentsTable").rows.length)
+}
+
+  else {
+  console.log("failure")
+    }
+   
+  }
+
+
+async function addToCommentsTable(comment) {
+  var tableRef = document.getElementById('commentsTable').getElementsByTagName('tbody')[0];
+  var newRow   = tableRef.insertRow();
+  var newCell  = newRow.insertCell(0);
+  newCell.appendChild(document.createTextNode(comment))
+  newCell.onclick = function(){(viewThisProfile(comment.split(':')[0].slice(1)))}
+  newCell.style.cursor = "pointer"
+  
+  
+}
+
+async function makeAComment() {
+  var text = document.getElementById("comment").value
+  var ref = db.collection("posts").doc(localStorage["userComment"])
+  ref.update({
+    comments: firebase.firestore.FieldValue.arrayUnion("@" + myUser + ": " + text) 
+  })
+  document.getElementById("comment").value = ''
+
+}
+function newLikeList(user,postNumber,data) {
+
+  localStorage['userLikes'] = user + String(postNumber)
+ 
+  if (data.likes != undefined){
+    var doc = data.likes
+    var count = 0
+  for (x=0; x<doc.length; x++){
+    addToLikesTable(doc[x])
+    count = count + 1
+    console.log(count)
+  }
+
+
+}
+
+  else {
+  console.log("failure")
+    }
+}
+
+async function addToLikesTable(user) {
+  var tableRef = document.getElementById('commentsTable').getElementsByTagName('tbody')[0];
+  var newRow   = tableRef.insertRow();
+  var newCell  = newRow.insertCell(0);
+  newCell.appendChild(document.createTextNode(user))
+  newCell.onclick = function(){(viewThisProfile(user))}
+  newCell.style.cursor = "pointer"
+  
+}
+
+async function deletePost(user,postNumber){
+  await db.collection("posts").doc(user + String(postNumber)).delete()
+  location.reload()
+}

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="realfeed.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
-  <script data-ad-client="ca-pub-6619188950861214" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
   <link rel="shortcut icon" href="apptivistLogorn.png">
   <title id>Apptivist</title>
 </head>
@@ -40,21 +40,24 @@
   </div>
 
 </div>
-<div id="imageModal" class="modal">
+<div id="commentsModal" class="modal" style="color:#124665;">
 
   <!-- Modal content -->
-  <div class="modal-content">
+  <div class="modal-content" style=" width: 100%; height: auto;">
     <span class="close">&times;</span>
-    <div style="display: inline;">
-      <div id="popup">
 
-      </div>
+  <table id="commentsTable">
+    <tbody>
 
-    </div>
-  </div>
+    </tbody>
+  </table>
+<input type="text" name="" id="comment" style = "color:#124665">
+<button onclick="makeAComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px;" id = "submitComment"> Comment </button>
+Refresh to see your comment/like
   </div>
 
 </div>
+
 
 
 <div id="makePost" style="margin-top: 20px; text-align: center; display: none;" >
@@ -81,9 +84,11 @@
   <table id="myTable" class="myTable, center" style="margin-top: 20px;">
    
     <tbody>
+      <div id="delete">
         <tr>
 
         </tr>
+      </div>
     </tbody>
 
 </table>
@@ -159,6 +164,33 @@ var storage = firebase.storage();
   storageRef.put(file); 
 })
 
+console.log('what')
+var commentsModal = document.getElementById("commentsModal");
+
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var commentspan = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+
+
+// When the user clicks on <span> (x), close the modal
+commentspan.onclick = function() {
+  commentsModal.style.display = "none";
+  for (x=0; x<localStorage["tableRowCount"]; x++){
+    document.getElementById("commentsTable").deleteRow(0)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == commentsModal) {
+    commentsModal.style.display = "none";
+  }
+}
+
 
 </script>
 
@@ -167,6 +199,9 @@ var storage = firebase.storage();
 
 </script>
 
+<script>
+  
+</script>
 </body>
 
 </html>

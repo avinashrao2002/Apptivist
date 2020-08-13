@@ -119,7 +119,6 @@
     height: 600px;
     background: #124665;
     box-shadow: 0 0 12px 2px rgba(0, 0, 0, .5);
-    margin-bottom: 20px;
     border-radius: 10px;
     font-size: 20px;
     overflow: scroll;
@@ -403,14 +402,17 @@ column-width: 500px;
   }
   
   .myRealButtons {
-width: 120px;
+width: 100px;
 height: 50px;
 border-radius: 10px;
 border: solid medium whitesmoke;
 background-color:  #EAEEED;
 margin-left: 20px;
 margin-right: 20px;
+margin-bottom: 10px;
+
 font-size: 15px;
+vertical-align: top;
 
   }
 

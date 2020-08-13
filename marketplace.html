@@ -38,6 +38,24 @@
   </div>
 
 </div>
+<div id="commentsModal" class="modal" style="color:#124665;">
+
+  <!-- Modal content -->
+  <div class="modal-content" style=" width: 100%; height: auto;">
+    <span class="close">&times;</span>
+
+  <table id="commentsTable">
+    <tbody>
+
+    </tbody>
+  </table>
+<input type="text" name="" id="comment" style = "color:#124665">
+<button onclick="makeAComment()" class="myRealButtons" id="submitComment" style="background-color: #124665; color: #EAEEED; margin-left: 0px;"> Comment </button>
+Refresh to see your comment
+  </div>
+
+</div>
+
 
 <div id="makePost" style="margin-top: 20px; text-align: center;" >
   <div style="display: inline;">
@@ -140,7 +158,32 @@ var storage = firebase.storage();
   var storageRef = storage.ref(myUser + '/' + myUser + String(totalPosts + 1));
   storageRef.put(file); 
 })
+console.log('waht')
+var commentsModal = document.getElementById("commentsModal");
 
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var commentspan = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+
+
+// When the user clicks on <span> (x), close the modal
+commentspan.onclick = function() {
+  commentsModal.style.display = "none";
+  for (x=0; x<localStorage["tableRowCount"]; x++){
+    document.getElementById("commentsTable").deleteRow(0)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == commentsModal) {
+    commentsModal.style.display = "none";
+  }
+}
 
 </script>
 
