@@ -5,7 +5,7 @@ totalPosts = 0
 
 var myUser = localStorage['myUser'] || 'N/A';
 var userToView = localStorage['userToView'] || myUser;
-var cachedPfp = localStorage["cachedPfp"] || "N/https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
+var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
 
 var isAProduct = false
 
