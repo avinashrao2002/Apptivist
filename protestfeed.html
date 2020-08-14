@@ -87,6 +87,31 @@ type="text/css"
 
 </div>
 
+
+</div>
+<div id="dashModal" class="modal" style="color:#124665;">
+
+  <!-- Modal content -->
+  <div class="modal-content" style=" width: 100%; height: auto;">
+    <span class="close">&times;</span>
+
+  <table id="dashTable">
+    <tr>
+      <th>
+        Going
+      </th> 
+       <th>
+        Interested
+      </th>
+    </tr>
+    <tbody>
+
+    </tbody>
+  </table>
+
+
+  </div>
+
 </div>
     <div id = "coverMap">
       <div style="text-align: center;">
@@ -98,11 +123,15 @@ type="text/css"
     <table id="protestsTable" class="myTable, center" style="row-gap: 400px; margin-top: 20px;  background: #EAEEED;
     color: #fff;">
 
+
+
+    
         <tbody>
             <tr>
 
             </tr>
         </tbody>
+
  </table>        
 
 </div>
@@ -226,6 +255,32 @@ geocoder.query("City Hall, San Francisco")
       appId: "1:728327151722:web:87b6c1e91b3eb72284aa13"
 };
 firebase.initializeApp(config);
+
+var dashModal = document.getElementById("dashModal");
+
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var dashspan = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+
+
+// When the user clicks on <span> (x), close the modal
+dashspan.onclick = function() {
+  dashModal.style.display = "none";
+  for (x=0; x<localStorage["dashCount"]; x++){
+    document.getElementById("dashTable").deleteRow(1)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == dashModal) {
+    dashModal.style.display = "none";
+  }
+}
 </script>
 </script>
 <script src="app.js"></script>

@@ -5,8 +5,7 @@ totalPosts = 0
 
 var myUser = localStorage['myUser'] || 'N/A';
 var userToView = localStorage['userToView'] || myUser;
-var cachedPfp = localStorage["cachedPfp"] || "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
-
+var cachedPfp = localStorage["cachedPfp"] || "N/https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
 
 var isAProduct = false
 
@@ -31,7 +30,7 @@ async function test() {
     lastName: document.getElementById("field4").value,
     userName: document.getElementById("field6").value,
     bio: "I am new to Apptivist!",
-    pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55",
+    pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b",
     followers: [document.getElementById("field6").value],
     following: [document.getElementById("field6").value],
     postNumber: 0
@@ -60,7 +59,7 @@ if (fmap.length>0) {
  
   });  
   localStorage["myUser"] = data.userName
-  localStorage["cachedPfp"] = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+  localStorage["cachedPfp"] = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
 
 }
 function hidePostBox(){
@@ -76,7 +75,7 @@ async function createPost(link,num,tex){
   var storageRef = storage.ref();
 
   var pfpLink = await storageRef.child(myUser + "/" + myUser + "pfp" + "_400x400").getDownloadURL().catch(async function handl() {
-    buzz = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
+    buzz = await storageRef.child("default" + "/" +  "pfp_400x400.png").getDownloadURL()
 
   })
   let data = {
@@ -684,15 +683,17 @@ for(q=0;q<dictionaryArray.length;q++){
   var userData = await db.collection("users").doc(dictionaryArray[q].key.handle).get()
   var linktopfp = userData.data().pfp
 //If clauses to see if everything exists
- addToProtests(dictionaryArray[q].key.name,dictionaryArray[q].key.description, dictionaryArray[q].key.handle, linktopfp, dictionaryArray[q].key.startDate, dictionaryArray[q].key.endDate,interested, going, dictionaryArray[q].key.location)
+ addToProtests(dictionaryArray[q].key.name,dictionaryArray[q].key.description, dictionaryArray[q].key.handle, linktopfp, dictionaryArray[q].key.startDate, dictionaryArray[q].key.endDate,interested, going, dictionaryArray[q].key.location, dictionaryArray[q].key)
 
   }
 }
 
-async function addToProtests(name, description, handle, pfp, startDate, endDate, interested, going, location){
+async function addToProtests(name, description, handle, pfp, startDate, endDate, interested, going, location, data){
   var tableRef = document.getElementById('protestsTable').getElementsByTagName('tbody')[0];
 // Insert a row in the table at the last row
 var newRow   = tableRef.insertRow();
+
+
 var pfpText = document.createTextNode(handle)
 pfpText.onclick = function(){
   viewThisProfile(handle)
@@ -745,9 +746,11 @@ interestedButton.innerHTML = "Interested"
 goingButton.innerHTML = "Going"
 interestedButton.onclick = function(){
   interestedInProtest(handle, name, myUser)
+  window.alert("Marked as Interested!")
 }
 goingButton.onclick = function(){
   goingToProtest(handle, name, myUser)
+  window.alert("Marked as Going!")
 }
 var newText  = document.createTextNode(name);
 
@@ -791,6 +794,20 @@ newCell.appendChild(document.createElement("br"));
 newCell.appendChild(viewMapButton);
 newCell.appendChild(interestedButton);
 newCell.appendChild(goingButton);
+if (myUser == handle){
+  var dashboardButton = document.createElement("button")
+  dashboardButton.innerHTML = "View Dashboard"
+  dashboardButton.classList.add("myRealButtons")
+  dashboardButton.style.backgroundColor = "#124665"
+  dashboardButton.style.width = "200px"
+  dashboardButton.onclick = function() {
+    console.log("here")
+    showDashboard(handle, name, data )
+    dashModal.style.display = "block";
+  }
+  newCell.appendChild(dashboardButton);
+  }
+
 newCell.appendChild(document.createElement("br"));
 newCell.appendChild(document.createElement("br"));
 newCell.appendChild(descripDiv);
@@ -833,7 +850,7 @@ async function updatePfp(user){
  
 
   var pfpLink = await storageRef.child(user + "/" + user + "pfp" +"_400x400").getDownloadURL()
-    er = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp.png?alt=media&token=ac4e5c07-b577-4ad0-99f4-4fe3bc525d55"
+    er = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
 
 
   data = {
@@ -845,10 +862,14 @@ async function updatePfp(user){
   userArray = userMap.docs.map(doc => doc.data())
   console.log(userArray)
   for(q=1;q<userArray.length + 1;q++){
-  db.collection('posts').doc(user + String(q)).update(data)
+  db.collection('posts').doc(user + String(q)).update(data).catch(function(){
+    console.log("no post exists")
+  })
   }
-  console.log("we did it")
+   console.log("we did it")
   localStorage["cachedPfp"] = pfpLink
+  setTimeout('', 4000)
+  location.reload()
 }
 
 async function profilePicLoad(user){
@@ -1111,7 +1132,7 @@ function editUser(){
 
 async function getUserData() {
   var storageRef = storage.ref();
-  var cool = await storageRef.child("default" + "/" +  "pfp.png").getDownloadURL()
+  var cool = await storageRef.child("default" + "/" +  "pfp_400x400.png").getDownloadURL()
   userD = await db.collection("users").doc(userToView).get()
   
   document.getElementById("profileImage").src = userD.data().pfp || cool
@@ -1519,3 +1540,41 @@ async function deletePost(user,postNumber){
   await db.collection("posts").doc(user + String(postNumber)).delete()
   location.reload()
 }
+function showDashboard(user, title, data) {
+  localStorage["dashCount"] = 0
+  if (data.going != undefined){
+
+    var doc = data.going
+    var count2 = 0
+  for (x=0; x<doc.length; x++){
+
+    addToDashboard(doc[x])
+    count2 = count2 + 1
+    console.log(count)
+  }
+}
+if (data.interested != undefined){
+
+  var doc2 = data.interested
+  var count = 0
+for (x=0; x<doc2.length; x++){
+  addToDashboard(doc2[x])
+  count = count + 1
+  console.log(count)
+}
+localStorage['dashCount'] = count + count2 + 1
+}
+
+}
+
+function addToDashboard(user){
+  var tableRef = document.getElementById('dashTable').getElementsByTagName('tbody')[0];
+  var newRow   = tableRef.insertRow();
+  var newCell  = newRow.insertCell(0);
+
+  newCell.appendChild(document.createTextNode("@" + user + " - email: "))
+  newCell.onclick = function(){(viewThisProfile(user))}
+  newCell.style.cursor = "pointer"
+  
+
+  }
