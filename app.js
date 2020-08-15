@@ -41,8 +41,13 @@ var errorDetermine = await db.collection('users').where("userName", "==", docume
 var fmap = errorDetermine.docs.map(doc => doc.data())
 console.log(fmap)
 
-if (fmap.length>0) {
+if (fmap.length>0 ) {
   window.alert("That username is already taken, sorry!")
+  return "broke"
+}
+
+if (document.getElementById("field6").value.includes(".") || document.getElementById("field6").value.includes(":")){
+  window.alert("Usernames cannot have : or .")
   return "broke"
 }
   // Add a new document in collection "cities" with ID 'LA'
@@ -731,10 +736,27 @@ var descripCell  = newRow.insertCell(1);
 
 // Append a text node to the cell
 console.log(startDate)
-startDate = new Date(startDate*1000).toUTCString()
-endDate = new Date(endDate*1000).toUTCString()
-endDate = endDate.slice(0,22)
-startDate = startDate.slice(0,22)
+var reformattedDate = new Date((startDate-25200)*1000).toUTCString()
+  var indicator = " AM"
+  var hour = parseInt((reformattedDate.slice(17,19)))
+  if (parseInt(reformattedDate.slice(17,19)) >= 12){
+    indicator = " PM"
+    hour = hour - 12
+
+  } 
+  reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
+   startDate = reformattedDate
+
+   var reformattedDate = new Date((endDate-25200)*1000).toUTCString()
+  var indicator = " AM"
+  var hour = parseInt((reformattedDate.slice(17,19)))
+  if (parseInt(reformattedDate.slice(17,19)) >= 12){
+    indicator = " PM"
+    hour = hour - 12
+
+  } 
+  reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
+  var endDate = reformattedDate
 var viewMapButton = document.createElement("button")
 viewMapButton.innerHTML = "View Map"
 viewMapButton.onclick = function(){
@@ -1008,7 +1030,17 @@ console.log(dictionaryArray)
   d = new Date()
   n = d.getTime()
   var tableRef = document.getElementById('myMarket').getElementsByTagName('tbody')[0];
-  var timeInfo = document.createTextNode(new Date(timestamp*1000).toUTCString())
+  var reformattedDate = new Date((timestamp-25200)*1000).toUTCString()
+  var indicator = " AM"
+  var hour = parseInt((reformattedDate.slice(17,19)))
+  if (parseInt(reformattedDate.slice(17,19)) >= 12){
+    indicator = " PM"
+    hour = hour - 12
+
+  } 
+  reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
+  var timeInfo = document.createTextNode(reformattedDate)
+
 
 
 // Insert a row in the table at the last row
@@ -1216,9 +1248,11 @@ async function unfollow() {
 
  async function updateBio() {
   var bioref = await db.collection("users").doc(myUser)
-  bioref.update({
+  await bioref.update({
     bio: document.getElementById("bioInput").value
   })
+  setTimeout('',1000)
+  location.reload()
  }
 
  function toCreateProtest(){
@@ -1249,6 +1283,8 @@ btn.onclick = function() {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
+  setTimeout('',1000)
+  location.reload()
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -1275,6 +1311,8 @@ unfollowbtn.onclick = function() {
 // When the user clicks on <span> (x), close the modal
 unfollowspan.onclick = function() {
   unfollowModal.style.display = "none";
+  setTimeout('',1000)
+  location.reload()
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -1517,7 +1555,7 @@ function newLikeList(user,postNumber,data) {
     count = count + 1
     console.log(count)
   }
-
+  localStorage['tableRowCount'] = count
 
 }
 

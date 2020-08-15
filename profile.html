@@ -25,7 +25,7 @@
 <title>Apptivist</title>
 </head>
 
-<body onload="preventHacking(), myfunc(),  profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons(), console.log(myUser), checkIfLoggedIn()">
+<body onload="checker(), preventHacking(), myfunc(),  profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons(), console.log(myUser), checkIfLoggedIn()">
     <style>
         body{
             color: #124665;
@@ -216,7 +216,7 @@ Refresh to see your comment/like
     </table>
 
     <div id ="as" style=" color: #EAEEED;">
-        <table id="protestsTable" class="myTable, center" style="margin-left:21.5%" >
+        <table id="protestsTable" class="myTable, center, myProtests" style=" color: #fff; margin-bottom: 200px;" >
     
             <tbody>
                 <tr>
@@ -302,6 +302,7 @@ var commentspan = document.getElementsByClassName("close")[4];
 // When the user clicks on <span> (x), close the modal
 commentspan.onclick = function() {
   commentsModal.style.display = "none";
+  console.log(localStorage['tableRowCount'])
   for (x=0; x<localStorage["tableRowCount"]; x++){
     document.getElementById("commentsTable").deleteRow(0)
   }
@@ -317,6 +318,15 @@ window.onclick = function(event) {
 </script>
 <script src="app.js">
 console.log(myUser + "heifndis")
+</script>
+<script>
+  function checker(){
+      console.log(localStorage['myUser'])
+ 
+  if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
+    window.location.href = "login_signup.html";
+  }
+}
 </script>
 </body>
 </html>

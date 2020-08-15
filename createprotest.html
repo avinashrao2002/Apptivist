@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="stylesheet" href="realfeed.css">
-    <title>Create a Protest</title>
+    <title>Create an Event</title>
 </head>
 <style>
 	body { margin: 0; padding: 0; }
@@ -53,7 +53,7 @@ background-color: #EAEEED;
         color: black;
     }
     </style>
-<body>
+<body onload = "checker(), preventHacking()">
 
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
@@ -88,32 +88,36 @@ type="text/css"
 <div style="text-align: center;">
 
     
- <button onclick="showProtest()" class = "buttoncolor, myRealButtons" style="color: #fff; margin-top: 100px; width: 200px; height: 100px; font-size: 20px; background-color: #124665;">Make your own protest</button> 
+ <button onclick="showProtest()" class = "buttoncolor, myRealButtons" style="color: #fff; margin-top: 100px; width: 200px; height: 100px; font-size: 20px; background-color: #124665;">Host your own Event</button> 
  
 
 <div id = "createPost" style="margin-bottom: 300px;">
     
-    <p style="color: #124665; display: inline;">Protest Name: </p>
-    <input type="text" id="protestName" class="protestName, buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; display: inline; margin-bottom: 30px; margin-top: 30px;">
+    <p style="color: #124665; margin-bottom: 0px;">Event Name: </p>
     <br>
-    <p style="color: #124665; display: inline;">Protest Description: </p>
-    <input type="text" id="protestDescription" class="protestDescription, buttoncolor" style="display: inline; width: 600px; height: 50px; border-radius: 20px; text-align: center;">
+    <input type="text" id="protestName" class="protestName, buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; margin-bottom: 30px; margin-top: 0px;">
+    <br>
+    <p style="color: #124665;">Event Description: </p>
+    <br>
+    <input type="text" id="protestDescription" class="protestDescription, buttoncolor" style="display: inline; width: 600px; height: 50px; border-radius: 20px;">
     <br>
 
-    <p style="color: #124665; margin-top: 30px;">When?</p>
-
-    <p style="color: #124665; display: inline;">Start Date: </p>
-    <input type="datetime-local" id="startdate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; display: inline; margin-top: 30px;">
+<br>
+    <p style="color: #124665;">Start Date: </p>
+<br>
+    <input type="datetime-local" id="startdate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center; display: inline; ">
     <br>
-    <p style="color: #124665; display: inline;">End Date: </p>
-    <input type="datetime-local" id="enddate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center;display: inline; margin-top: 30px;">
+    <br>
+    <p style="color: #124665;">End Date: </p>
+    <br>
+    <input type="datetime-local" id="enddate" name="birthdaytime" class = "buttoncolor" style="width: 600px; height: 50px; border-radius: 20px; text-align: center;display: inline;">
     <p style="color: #124665; margin-top: 30px;">Where?</p>
     <br>
     <div id='map' style='width: 800px; height: 800px; margin-left: auto; margin-right: auto;'></div>
     <br>
 
     <div style="display: inline;">
-    <button onclick="makeProtest(myUser)" class = "buttoncolor, myRealButtons" style="color: black;" >Make your protest!</button> 
+    <button onclick="makeProtest(myUser)" class = "buttoncolor, myRealButtons" style="color: black;" >Make your Event!</button> 
     <button onclick="hideProtest()" class = "buttoncolor , myRealButtons" >Cancel</button>  
     </div>
     <br>
@@ -249,6 +253,14 @@ geocoder.query("City Hall, San Francisco")
 };
 firebase.initializeApp(config);
 </script>
+<script>
+  function checker(){
+      console.log(localStorage['myUser'])
+ 
+  if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
+    window.location.href = "login_signup.html";
+  }
+}
 </script>
 <script src="app.js"></script>
 </body>

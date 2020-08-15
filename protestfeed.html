@@ -54,7 +54,7 @@ body{
         color: black;
     }
     </style>
-<body onload = "preventHacking(), retrieveProtests(), hideMap()">
+<body onload = "preventHacking(), retrieveProtests(), hideMap(), checker()">
 
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link
@@ -120,8 +120,8 @@ type="text/css"
     </div>
 
 <div id ="as">
-    <table id="protestsTable" class="myTable, center" style="row-gap: 400px; margin-top: 20px;  background: #EAEEED;
-    color: #fff;">
+    <table id="protestsTable" class="myTable, center, myProtests" style="margin-top: 20px;  background: #EAEEED;
+    color: #fff; margin-bottom: 200px;">
 
 
 
@@ -283,6 +283,14 @@ window.onclick = function(event) {
 }
 </script>
 </script>
+<script>
+function checker(){
+  console.log(localStorage['myUser'])
+
+if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
+window.location.href = "login_signup.html";
+}
+}</script>
 <script src="app.js"></script>
 </body>
 

@@ -17,7 +17,7 @@
   <title id>Apptivist</title>
 </head>
 
-<body onload = "preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
+<body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
 <!-- Top navigation -->
 <div class="topnav">
 
@@ -97,7 +97,7 @@ Refresh to see your comment/like
 
 
 
-  <p style="text-align: center; color: #124665;">No Posts Yet! Follow other users to see posts or create one yourself!</p>
+  <p style="text-align: center; color: #124665;"> Follow other users to see more posts or create one yourself!</p>
 
    
 
@@ -200,7 +200,13 @@ window.onclick = function(event) {
 </script>
 
 <script>
-  
+  function checker(){
+      console.log(localStorage['myUser'])
+ 
+  if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
+    window.location.href = "login_signup.html";
+  }
+}
 </script>
 </body>
 

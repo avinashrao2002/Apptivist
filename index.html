@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
   <script data-ad-client="ca-pub-6619188950861214" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <link rel="manifest" href="./manifest.webmanifest">
@@ -64,7 +64,15 @@
       <div id="pagination"></div>
     </div>
   </div>
-  </div>
+  </div> 
+  <script src="app.js">
+
+  </script>
+  <script>
+     myUser = localStorage['myUser']
+    localStorage['userToView'] = myUser
+    
+  </script>
   <section class="nav">
 
     <div class="icon" onclick="toMarketplace()" style="cursor: pointer;">
@@ -102,9 +110,9 @@
   <script src="https://cdn.jsdelivr.net/algoliasearch/3.32.0/algoliasearchLite.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.7.0"></script>
   <script src="./src/app.js"></script>
-  <script src="app.js"></script>
+ 
   <script>
-
+   
     function encompass(param) {
       console.log(param)
       viewThisProfile(param)

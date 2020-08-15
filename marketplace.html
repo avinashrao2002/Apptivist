@@ -15,7 +15,7 @@
   <title id>Apptivist</title>
 </head>
 
-<body onload = "preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveMarketplace(), numpostRetriever()" >
+<body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveMarketplace(), numpostRetriever()" >
 <!-- Top navigation -->
 <div class="topnav">
 
@@ -89,7 +89,7 @@ Refresh to see your comment
 </table>
  
 
-
+<p style="text-align: center; color: #124665;"> Follow other users to see more posts or create one yourself!</p>
 
 
   
@@ -191,7 +191,15 @@ window.onclick = function(event) {
 <script src="app.js">
 
 </script>
-
+<script>
+  function checker(){
+      console.log(localStorage['myUser'])
+ 
+  if (localStorage['myUser'] == null ||localStorage['myUser'] == "undefined"  || localStorage['myUser'] == "N/A") {
+    window.location.href = "login_signup.html";
+  }
+}
+</script>
 </body>
 
 </html>
