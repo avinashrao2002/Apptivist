@@ -355,6 +355,11 @@ column-width: 500px;
     position: relative;
     background-color: #124665;
     overflow: hidden;
+
+  
+
+
+
   }
   
   /* Style the links inside the navigation bar */
@@ -365,7 +370,7 @@ column-width: 500px;
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-    width: 100vw;
+    
   }
   
   /* Change the color of links on hover */
@@ -432,8 +437,8 @@ vertical-align: top;
     top: 50%;
     right: 0;
     left: 0;
-    margin-left: 46%;
-    width: 120px;
+    margin-left: 48.2%;
+    width: 42px;
     height: 42px;
     transform: translateY(-50%);
     transition: 0.3s ease width;
@@ -455,7 +460,7 @@ vertical-align: top;
 
 #app:before
 {
-    content: "Upload";
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
@@ -637,6 +642,7 @@ input[type="file"] {
   z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
+
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */

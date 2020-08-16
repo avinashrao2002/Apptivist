@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
   <link rel="shortcut icon" href="apptivistLogorn.png">
-  <title id>Apptivist</title>
+  <title id>Apptivism</title>
 </head>
 
 <body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveMarketplace(), numpostRetriever()" >
@@ -157,6 +157,7 @@ var storage = firebase.storage();
   console.log("i've makde it this far");
   var storageRef = storage.ref(myUser + '/' + myUser + String(totalPosts + 1));
   storageRef.put(file); 
+  document.getElementById('upload_app').click()
 })
 console.log('waht')
 var commentsModal = document.getElementById("commentsModal");

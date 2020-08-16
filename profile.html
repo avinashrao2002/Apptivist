@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 <link rel="shortcut icon" href="apptivistLogorn.png">
-<title>Apptivist</title>
+<title>Apptivism</title>
 </head>
 
 <body onload="checker(), preventHacking(), myfunc(),  profilePicLoad(userToView), getUserData(), retrieveMyPosts(userToView), hideProtests(), buttons(), console.log(myUser), checkIfLoggedIn()">
@@ -139,6 +139,37 @@ Refresh to see your comment/like
 
 </div>
 
+<div id="dashModal" class="modal" style="color:#124665;">
+
+  <!-- Modal content -->
+  <div class="modal-content" style=" width: 100%; height: auto;">
+    <span class="close">&times;</span>
+
+  <table id="dashTable">
+    <tr>
+      <th>
+        Going
+      </th> 
+       <th>
+        Interested
+      </th>
+    </tr>
+    <tbody>
+
+    </tbody>
+  </table>
+
+<div id = "intEmails" style="margin-top: 30px;">
+
+</div>
+
+<div id="goingEmails" style="margin-top: 30px;">
+
+</div>
+  </div>
+
+</div>
+
 
 <div style="text-align: center;">
   
@@ -205,9 +236,9 @@ Refresh to see your comment/like
 
 </div>
 <div >
-    <table id="myTable" class="myTable, center" align="center" style="padding-bottom: 100px; color: #EAEEED; position: relative; margin-left: 20.25%" >
+    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; position: relative;" >
 
-        <tbody>
+        <tbody style="margin-left: auto;">
             <tr>
 
             </tr>
@@ -315,6 +346,31 @@ window.onclick = function(event) {
   }
 }
 
+var dashModal = document.getElementById("dashModal");
+
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var dashspan = document.getElementsByClassName("close")[5];
+
+// When the user clicks on the button, open the modal
+
+
+// When the user clicks on <span> (x), close the modal
+dashspan.onclick = function() {
+  dashModal.style.display = "none";
+  for (x=0; x<localStorage["dashCount"]; x++){
+    document.getElementById("dashTable").deleteRow(1)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == dashModal) {
+    dashModal.style.display = "none";
+  }
+}
 </script>
 <script src="app.js">
 console.log(myUser + "heifndis")

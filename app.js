@@ -29,7 +29,7 @@ async function test() {
     isOrganization: false,
     lastName: document.getElementById("field4").value,
     userName: document.getElementById("field6").value,
-    bio: "I am new to Apptivist!",
+    bio: "I am new to Apptivism!",
     pfp: "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b",
     followers: [document.getElementById("field6").value],
     following: [document.getElementById("field6").value],
@@ -99,6 +99,7 @@ async function createPost(link,num,tex){
 }
 
 async function submitPost() {
+  
   var storageRef = storage.ref();
 
   console.log("In submit post, total posts is " + totalPosts)
@@ -114,6 +115,7 @@ async function submitPost() {
   db.collection('users').doc(myUser).update(data)
   document.getElementById("postText").value = ""
   hidePostBox()
+  location.reload()
 
 }).catch(function(error) {
 
@@ -585,13 +587,19 @@ var ate = await firebase.firestore().collection('posts').doc(user + postNumber).
 const ref = await firebase.firestore().collection('posts').doc(user + postNumber)
 
   if (ate.data().likes.includes(myUser)){
-    console.log("already exists")}
+    ref.update({
+      likes: firebase.firestore.FieldValue.arrayRemove(myUser)
+    })
+    document.getElementById(user + String(postNumber)).style.backgroundColor = "#EAEEED"
+  }
   else {
   ref.update({
     likes: firebase.firestore.FieldValue.arrayUnion(myUser)
   })
+  document.getElementById(user + String(postNumber)).style.backgroundColor = "#EAC2C2"
 }
-document.getElementById(user + String(postNumber)).style.backgroundColor = "#EAC2C2"
+
+  
 }
 
 async function likeNumber(user, postNumber){
@@ -762,6 +770,17 @@ viewMapButton.innerHTML = "View Map"
 viewMapButton.onclick = function(){
   viewOnMap(location, wordLocation)
 }
+var commentsButton = document.createElement("button")
+commentsButton.innerHTML = "View Comments"
+commentsButton.classList.add("myRealButtons")
+
+commentsButton.onclick = function(){
+
+  readComments(handle, name, data)
+  commentsModal.style.display = "block";
+  document.getElementById("comment").style.display = "block"
+  document.getElementById("submitComment").style.display = "block"
+}
 var interestedButton = document.createElement("button")
 var goingButton = document.createElement("button")
 interestedButton.innerHTML = "Interested"
@@ -816,6 +835,8 @@ newCell.appendChild(document.createElement("br"));
 newCell.appendChild(viewMapButton);
 newCell.appendChild(interestedButton);
 newCell.appendChild(goingButton);
+newCell.appendChild(commentsButton);
+commentsButton.style.color = "black"
 if (myUser == handle){
   var dashboardButton = document.createElement("button")
   dashboardButton.innerHTML = "View Dashboard"
@@ -890,7 +911,7 @@ async function updatePfp(user){
   }
    console.log("we did it")
   localStorage["cachedPfp"] = pfpLink
-  setTimeout('', 4000)
+  setTimeout('', 10000)
   location.reload()
 }
 
@@ -919,7 +940,7 @@ const ss = await firebase.firestore().collection('events').doc(creator + name)
     console.log("already exists")}
   else {
   ss.update({
-    interested: firebase.firestore.FieldValue.arrayUnion(user)
+    interested: firebase.firestore.FieldValue.arrayUnion("@" + user + ": " + localStorage["userEmail"])
   })
 }
 }
@@ -932,7 +953,7 @@ const dd = await firebase.firestore().collection('events').doc(creator + name)
     console.log("already exists")}
   else {
   dd.update({
-    going: firebase.firestore.FieldValue.arrayUnion(user)
+    going: firebase.firestore.FieldValue.arrayUnion("@" + user + ": " + localStorage["userEmail"])
   })
 }
 }
@@ -1423,7 +1444,7 @@ async function preventHacking(){
   firebase.auth().onAuthStateChanged(async function(user) {
     if (user) {
       var email = await firebase.auth().currentUser.email
-      console.log(email)
+      localStorage['userEmail'] = email
       var document = await db.collection("users").doc(myUser).get()
       var emailCheck = document.data().email
       if (emailCheck != email){
@@ -1543,6 +1564,16 @@ async function makeAComment() {
   document.getElementById("comment").value = ''
 
 }
+
+async function makeAProtestComment() {
+  var text = document.getElementById("comment").value
+  var ref = db.collection("events").doc(localStorage["userComment"])
+  ref.update({
+    comments: firebase.firestore.FieldValue.arrayUnion("@" + myUser + ": " + text) 
+  })
+  document.getElementById("comment").value = ''
+
+}
 function newLikeList(user,postNumber,data) {
 
   localStorage['userLikes'] = user + String(postNumber)
@@ -1575,44 +1606,85 @@ async function addToLikesTable(user) {
 }
 
 async function deletePost(user,postNumber){
+  var r = confirm("Are you sure you want to delete your post? You won't be able to retrieve it ever again.")
+  if (r){
   await db.collection("posts").doc(user + String(postNumber)).delete()
   location.reload()
+  }
 }
 function showDashboard(user, title, data) {
   localStorage["dashCount"] = 0
   if (data.going != undefined){
-
+    goingEmails = ["Going Emails: "]
     var doc = data.going
-    var count2 = 0
+    var count2 = 1
   for (x=0; x<doc.length; x++){
 
-    addToDashboard(doc[x])
+    addToDashboard(doc[x],true)
     count2 = count2 + 1
     console.log(count)
+    goingEmails = goingEmails + doc[x].split(":")[1].slice(1) + ', '
   }
+  document.getElementById("goingEmails").innerHTML = goingEmails
+  localStorage["isGoing"] = count2
 }
 if (data.interested != undefined){
-
+interestedEmails = ["Interested Emails: "]
   var doc2 = data.interested
-  var count = 0
+  var count = 1
+  localStorage["isInt"] = 1
 for (x=0; x<doc2.length; x++){
-  addToDashboard(doc2[x])
+  addToDashboard(doc2[x], false)
   count = count + 1
+  localStorage["isInt"] = count
   console.log(count)
+  interestedEmails = interestedEmails + doc2[x].split(":")[1].slice(1) + ', '
 }
-localStorage['dashCount'] = count + count2 + 1
+  document.getElementById("intEmails").innerHTML = interestedEmails
+localStorage['dashCount'] = Math.max(count, count2)
 }
 
 }
 
-function addToDashboard(user){
+function addToDashboard(user, isGoing){
+  if (isGoing){
+  console.log(user)
   var tableRef = document.getElementById('dashTable').getElementsByTagName('tbody')[0];
   var newRow   = tableRef.insertRow();
   var newCell  = newRow.insertCell(0);
 
-  newCell.appendChild(document.createTextNode("@" + user + " - email: "))
+  newCell.appendChild(document.createTextNode(user))
   newCell.onclick = function(){(viewThisProfile(user))}
   newCell.style.cursor = "pointer"
-  
+ 
+  }
+  else {
+    if (localStorage["isInt"] < localStorage["isGoing"]){
+     
+      var rowref = document.getElementById('dashTable').rows[localStorage['isInt']]
+      var secondCell = rowref.insertCell(-1)
+      secondCell.appendChild(document.createTextNode(user))
+      secondCell.onclick = function(){(viewThisProfile(user))}
+      secondCell.style.cursor = "pointer"
+    }
+    else{
+      var tableRef = document.getElementById('dashTable').getElementsByTagName('tbody')[0];
+      var newRow   = tableRef.insertRow();
+      var cell1  = newRow.insertCell(0);
+      var newCell  = newRow.insertCell(1);
+    
+      newCell.appendChild(document.createTextNode(user))
+      newCell.onclick = function(){(viewThisProfile(user))}
+      newCell.style.cursor = "pointer"
+    }
 
+  }
+
+  }
+
+  
+  function redirected(other){
+    if (localStorage['redirect'] = true){
+    other()
+    }
   }

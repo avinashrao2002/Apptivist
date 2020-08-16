@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <link rel="shortcut icon" href="apptivistLogorn.png">
-    <title>Apptivist</title>
+    <title>Apptivism</title>
 
 </head>
 <style>
@@ -89,6 +89,23 @@ type="text/css"
 
 
 </div>
+<div id="commentsModal" class="modal" style="color:#124665;">
+
+  <!-- Modal content -->
+  <div class="modal-content" style=" width: 100%; height: auto;">
+    <span class="close">&times;</span>
+
+  <table id="commentsTable">
+    <tbody>
+
+    </tbody>
+  </table>
+<input type="text" name="" id="comment" style = "color:#124665">
+<button onclick="makeAProtestComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px;" id="submitComment"> Comment </button>
+Refresh to see your comment/like
+  </div>
+
+</div>
 <div id="dashModal" class="modal" style="color:#124665;">
 
   <!-- Modal content -->
@@ -109,7 +126,13 @@ type="text/css"
     </tbody>
   </table>
 
+<div id = "intEmails" style="margin-top: 30px;">
 
+</div>
+
+<div id="goingEmails" style="margin-top: 30px;">
+
+</div>
   </div>
 
 </div>
@@ -256,13 +279,39 @@ geocoder.query("City Hall, San Francisco")
 };
 firebase.initializeApp(config);
 
+var commentsModal = document.getElementById("commentsModal");
+
+// Get the button that opens the modal
+
+
+// Get the <span> element that closes the modal
+var commentspan = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+
+// When the user clicks on <span> (x), close the modal
+commentspan.onclick = function() {
+  commentsModal.style.display = "none";
+  console.log(localStorage['tableRowCount'])
+  for (x=0; x<localStorage["tableRowCount"]; x++){
+    document.getElementById("commentsTable").deleteRow(0)
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == commentsModal) {
+    commentsModal.style.display = "none";
+  }
+}
+
 var dashModal = document.getElementById("dashModal");
 
 // Get the button that opens the modal
 
 
 // Get the <span> element that closes the modal
-var dashspan = document.getElementsByClassName("close")[0];
+var dashspan = document.getElementsByClassName("close")[1];
 
 // When the user clicks on the button, open the modal
 

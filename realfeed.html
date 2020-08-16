@@ -14,7 +14,7 @@
   <script src="https://kit.fontawesome.com/9f37ddf547.js"></script>
   
   <link rel="shortcut icon" href="apptivistLogorn.png">
-  <title id>Apptivist</title>
+  <title id>Apptivism</title>
 </head>
 
 <body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
@@ -29,14 +29,14 @@
   </div>
 
   <!-- Left-aligned links (default) -->
-  <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-  <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 15%;">Organize an Event</a>
-  <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
+  <a href="#news" onclick="showPostBox(), numpostRetriever()" style="margin-left: auto; margin-right: auto;">Create Post</a>
+  <a href="#contact" onclick = "toCreateProtest()" style="left: 25%;margin-left: auto; margin-right: auto;">Organize an Event</a>
+
 
   <!-- Right-aligned links -->
   <div class="topnav-right">
-    
-    <a href="#about" onclick="logout()">Logout</a>
+    <a href="#search" onclick="toCustomDesigner()" style="left: 50%; margin-left: auto; margin-right: auto;">Custom Designer</a>
+    <a href="#about" onclick="logout()" style="left: 75%; margin-left: auto; margin-right: auto;">Logout</a>
   </div>
 
 </div>
@@ -51,8 +51,8 @@
 
     </tbody>
   </table>
-<input type="text" name="" id="comment" style = "color:#124665">
-<button onclick="makeAComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px;" id = "submitComment"> Comment </button>
+<input type="text" name="" id="comment" style = "color:#124665;">
+<button onclick="makeAComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px; " id = "submitComment"> Comment </button>
 Refresh to see your comment/like
   </div>
 
@@ -68,6 +68,7 @@ Refresh to see your comment/like
     <label for="uploadImage" class="myRealButtons" style="color: black; height: 30px; width: 300px; border: 20px thin black; cursor: pointer; vertical-align: top; margin-top: 20px;">Click Here to Choose a Picture</label>
     <input type="file" id ="uploadImage" style="margin-top: 20px; margin-bottom: 40px; color: black; font-size: 20px; vertical-align: top; margin-top: 20px;"> 
     <button class="myRealButtons" id="productChoice"onclick = "chooseProduct()"style="height: 30px; width: 400px; margin-top: 20px; margin-bottom: 40px;"> Is this a product you're selling? </button>
+    <div style="display: inline; margin-left: auto; margin-right: auto;">
     <input type="checkbox" id="c">
     <label for="c" id="upload_app">
       <div id="app">
@@ -77,6 +78,7 @@ Refresh to see your comment/like
         </div>
       </div>
     </label>
+  </div>
     <button onclick="submitPost()" class="myRealButtons" style="margin-top: 20px;">Post!</button>
     <button onclick="hidePostBox()" class="myRealButtons" style="margin-top: 20px;">Cancel Post</button>
 </div>
@@ -84,11 +86,11 @@ Refresh to see your comment/like
   <table id="myTable" class="myTable, center" style="margin-top: 20px;">
    
     <tbody>
-      <div id="delete">
+      
         <tr>
 
         </tr>
-      </div>
+      
     </tbody>
 
 </table>
@@ -162,6 +164,8 @@ var storage = firebase.storage();
   console.log("i've makde it this far");
   var storageRef = storage.ref(myUser + '/' + myUser + String(totalPosts + 1));
   storageRef.put(file); 
+  document.getElementById('upload_app').click()
+  
 })
 
 console.log('what')
