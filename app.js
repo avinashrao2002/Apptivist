@@ -51,7 +51,7 @@ if (document.getElementById("field6").value.includes(".") || document.getElement
   return "broke"
 }
   // Add a new document in collection "cities" with ID 'LA'
-  db.collection('users').doc(document.getElementById("field6").value).set(data);
+var garbage = true
   
 
   await firebase.auth().createUserWithEmailAndPassword(signupemail, signuppass).catch(function(error) {
@@ -59,13 +59,16 @@ if (document.getElementById("field6").value.includes(".") || document.getElement
         var errorCode = error.code;
         var errorMessage = error.message;
         window.alert("Error : " + errorMessage);
+        garbage = false
     // ...
     
  
   });  
+  if (garbage){
+  db.collection('users').doc(document.getElementById("field6").value).set(data);
   localStorage["myUser"] = data.userName
   localStorage["cachedPfp"] = "https://firebasestorage.googleapis.com/v0/b/protestapp-599ff.appspot.com/o/default%2Fpfp_400x400.png?alt=media&token=f69b4ca5-cffe-4d36-90ec-98319bf77d6b"
-
+  }
 }
 function hidePostBox(){
   

@@ -229,16 +229,16 @@ Refresh to see your comment/like
     <!-- End of profile section -->
     <div class="choices" style=" padding-bottom: 100px">
         <button class="myRealButtons" style="color: #EAEEED; background-color: #124665;" onclick="retrieveMyPosts(userToView), hideProtests()">Posts</button>
-        <button class="myRealButtons" style="color: #EAEEED; background-color: #124665;" onclick="retrieveProtests(), hidePosts()">Protests</button>
+        <button class="myRealButtons" style="color: #EAEEED; background-color: #124665;" onclick="retrieveProtests(), hidePosts()">Events</button>
     </div>
 
 </div>
 
 </div>
-<div >
-    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; position: relative;" >
+<div style="display: inline;">
+    <table id="myTable" class="myTable, center" style="padding-bottom: 100px; color: #EAEEED; position: relative; display: inline-table; width: 840px; margin: auto; " >
 
-        <tbody style="margin-left: auto;">
+        <tbody>
             <tr>
 
             </tr>
@@ -247,7 +247,7 @@ Refresh to see your comment/like
     </table>
 
     <div id ="as" style=" color: #EAEEED;">
-        <table id="protestsTable" class="myTable, center, myProtests" style=" color: #fff; margin-bottom: 200px;" >
+        <table id="protestsTable" class="myTable, center, myProtests" style=" color: #fff; width: 800px; margin-bottom: 200px; margin: auto;" >
     
             <tbody>
                 <tr>
@@ -275,7 +275,7 @@ Refresh to see your comment/like
 
     <div class="icon" onclick="viewMyProtests()" style="cursor: pointer;">
       <i class="fas fa-user-friends"></i>
-      <p>Protests</p>
+      <p>Events</p>
     </div>
 
 
