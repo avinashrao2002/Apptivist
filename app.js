@@ -463,7 +463,9 @@ console.log(dictionaryArray)
   reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
   var timeInfo = document.createTextNode(reformattedDate)
 
-  
+  if (caption.includes("n")){
+    caption.replace("n", "n")
+  }
   
 
 
