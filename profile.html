@@ -45,13 +45,13 @@
     </div>
   
     <!-- Left-aligned links (default) -->
-    <a href="#news" onclick="viewMyFeed(), showPostBox(), numpostRetriever()" style="margin-right: 20%;">Create Post</a>
-    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: 15%;">Organize an Event</a>
-    <a href="#search" onclick="toCustomDesigner()">Custom Designer</a>
+    <a href="#news" onclick="viewMyFeed(), showPostBox(), numpostRetriever()" style="margin-right: auto;">Create Post</a>
+    <a href="#contact" onclick = "toCreateProtest()" style="margin-right: auto;">Organize an Event</a>
+
   
     <!-- Right-aligned links -->
     <div class="topnav-right">
-      
+      <a href="#search" onclick="toCustomDesigner()" style="left: 50%; margin-left: auto; margin-right: auto;">Custom Designer</a>
       <a href="#about" onclick="logout()">Logout</a>
     </div>
   
@@ -199,7 +199,8 @@ Refresh to see your comment/like
                 <input type="text" id="bioInput" style="width: 600px; height: 50px; border-radius: 20px;">
                 <button class="myRealButtons" id="1jds" style="color: #EAEEED; background-color: #124665; " onclick="updateBio()">Confirm</button>
     </div>
-        
+      
+    <button class="myRealButtons" onclick="blockUser(userToView)">Block user</button>
 
         <div >
 <div style="display: inline;">

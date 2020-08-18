@@ -383,6 +383,15 @@ async function retrieveFeed() {
   var timestampArray = []
   const snapFollow = await firebase.firestore().collection('users').doc(myUser).get()
   const followingArray = snapFollow.data().following
+  var blockedArray = ['none']
+  var flaggedArray = ['none']
+  if (snapFollow.data().flaggedPosts!= undefined){
+    flaggedArray = snapFollow.data().flaggedPosts
+ }
+  if (snapFollow.data().blocked != undefined){
+    blockedArray = snapFollow.data().blocked
+ }
+ 
 console.log(followingArray)
 
 
@@ -390,6 +399,8 @@ console.log(followingArray)
   if (followingArray.length > 0){
   var sortingArray = []
   for (a = 0; a<followingArray.length; a++){
+    
+    if (!blockedArray.includes(followingArray[a])){
   const snapshot = await firebase.firestore().collection('posts').where("handle", "==", followingArray[a]).get()
   const array = snapshot.docs.map(doc => doc.data())
   allPosts.push(array)
@@ -399,6 +410,8 @@ console.log(followingArray)
   var allPosts = [].concat.apply([], allPosts)
 
   sortingArray.push(followingArray[a])
+    
+    }
   }
   for(q=0;q<allPosts.length;q++){
     timestampArray.push(allPosts[q].created)
@@ -423,9 +436,10 @@ console.log(dictionaryArray)
       else {
         btnColor = "#EAEEED"
       }
+      if (!flaggedArray.includes(dictionaryArray[q].key.handle + String(dictionaryArray[q].key.postNumber))){
     addToTable(dictionaryArray[q].key.imageLink,dictionaryArray[q].key.text, dictionaryArray[q].key.handle, dictionaryArray[q].key.pfp, dictionaryArray[q].key.created, dictionaryArray[q].key.postNumber, dictionaryArray[q].key.likes.length, btnColor, dictionaryArray[q].key)
     }
-    
+  }
   }
 
 }
@@ -479,7 +493,20 @@ spanDiv.classList.add("spanForText")
 
 listLikeButton.innerHTML = newLikes + " &hearts;"
 listLikeButton.style.backgroundColor = "#124665"
+var reportDiv = document.createElement('div')
+reportDiv.innerHTML = "&#9873; Report"
+reportDiv.style.color = "white"
+reportDiv.style.fontSize = "11px"
+reportDiv.style.marginLeft = "20px"
+reportDiv.style.marginTop = "10px"
+reportDiv.style.marginBottom = "10px"
+reportDiv.style.width = "100px"
+reportDiv.style.display = "inline"
+reportDiv.style.cursor = "pointer"
 
+reportDiv.onclick = function (){
+  flagpost(handle, postNumber)
+}
 picandhandlediv.appendChild(profileImage)
 picandhandlediv.appendChild(document.createTextNode("@"))
 picandhandlediv.appendChild(pfpText)
@@ -544,6 +571,8 @@ if (myUser == handle){
   deletediv.style.fontSize = "10px"
   deletediv.style.marginLeft = "20px"
   deletediv.style.marginTop = "20px"
+  deletediv.style.width = "100px"
+  deletediv.style.display = "inline"
   deletediv.style.cursor = "pointer"
   deletediv.innerHTML = "&#x26D4; Delete Post"
   console.log("this far")
@@ -552,6 +581,7 @@ if (myUser == handle){
   }
   newCell.appendChild(deletediv)
   }
+  newCell.appendChild(reportDiv)
 likeButton.style.marginRight = "0px"
 
 listLikeButton.style.marginRight = "0px"
@@ -719,6 +749,20 @@ var profileImage = document.createElement("img")
 profileImage.onclick = function(){
   viewThisProfile(handle)
 }
+var reportDiv = document.createElement('div')
+reportDiv.innerHTML = "&#9873; Report"
+reportDiv.style.color = "white"
+reportDiv.style.fontSize = "11px"
+reportDiv.style.marginLeft = "20px"
+reportDiv.style.marginTop = "10px"
+reportDiv.style.marginBottom = "10px"
+reportDiv.style.width = "100px"
+reportDiv.style.display = "inline"
+reportDiv.style.cursor = "pointer"
+
+reportDiv.onclick = function (){
+  flagpost(handle, name)
+}
 profileImage.style.cursor = "pointer"
 var wordLocation = null
 var titleDiv = document.createElement("div")
@@ -839,6 +883,7 @@ newCell.appendChild(viewMapButton);
 newCell.appendChild(interestedButton);
 newCell.appendChild(goingButton);
 newCell.appendChild(commentsButton);
+
 commentsButton.style.color = "black"
 if (myUser == handle){
   var dashboardButton = document.createElement("button")
@@ -857,6 +902,7 @@ if (myUser == handle){
 newCell.appendChild(document.createElement("br"));
 newCell.appendChild(document.createElement("br"));
 newCell.appendChild(descripDiv);
+newCell.appendChild(reportDiv)
 viewMapButton.classList.add("myRealButtons")
 interestedButton.classList.add("myRealButtons")
 goingButton.classList.add("myRealButtons")
@@ -1087,6 +1133,20 @@ commentsButton.onclick = function(){
   document.getElementById("comment").style.display = "block"
   document.getElementById("submitComment").style.display = "block"
 }
+var reportDiv = document.createElement('div')
+reportDiv.innerHTML = "&#9873; Report"
+reportDiv.style.color = "white"
+reportDiv.style.fontSize = "11px"
+reportDiv.style.marginLeft = "20px"
+reportDiv.style.marginTop = "10px"
+reportDiv.style.marginBottom = "10px"
+reportDiv.style.width = "100px"
+reportDiv.style.display = "inline"
+reportDiv.style.cursor = "pointer"
+
+reportDiv.onclick = function (){
+  flagpost(handle, postNumber)
+}
 spanDiv.classList.add("spanForText")
 
 picandhandlediv.appendChild(profileImage)
@@ -1158,6 +1218,7 @@ deletediv.onclick = function(){
 }
 newCell.appendChild(deletediv)
 }
+newCell.appendChild(reportDiv)
 
 likeButton.classList.add("myRealButtons")
 
@@ -1689,5 +1750,28 @@ function addToDashboard(user, isGoing){
   function redirected(other){
     if (localStorage['redirect'] = true){
     other()
+    }
+  }
+
+  async function blockUser(user) {
+    var ref  = await db.collection('users').doc(myUser)
+    ref.update({
+      blocked: firebase.firestore.FieldValue.arrayUnion(myUser)
+    })
+  }
+
+  async function flagpost(handle, postNumber) {
+    var r =  confirm("Are you sure you want to report this post?")
+    var z = prompt("Would you like to explain why you reported this post?", "None")
+    if (r){
+      db.collection('flagged').doc(handle + String(postNumber)).set({
+        userName: handle,
+        postNumber: postNumber,
+        reportedBy: myUser,
+        reportComment: z
+      })
+      db.collection("users").doc(myUser).update({
+        flaggedPosts: firebase.firestore.FieldValue.arrayUnion(handle + String(postNumber))
+      })
     }
   }
