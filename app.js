@@ -118,7 +118,7 @@ async function submitPost() {
   db.collection('users').doc(myUser).update(data)
   document.getElementById("postText").value = ""
   hidePostBox()
-  location.reload()
+
 
 }).catch(function(error) {
 
