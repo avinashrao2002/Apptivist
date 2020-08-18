@@ -106,22 +106,30 @@ async function submitPost() {
   var storageRef = storage.ref();
 
   console.log("In submit post, total posts is " + totalPosts)
-  await storageRef.child(myUser + '/' + myUser + String(totalPosts + 1) + "_400x400").getDownloadURL().then(function(url) {
+  await storageRef.child(myUser + '/' + myUser + String(totalPosts + 1) + "_400x400").getDownloadURL().then(async function(url) {
   var imageLink = url  
   console.log('this far')
   console.log(url)
 
-  createPost(imageLink, totalPosts + 1, document.getElementById("postText").value)
+  await createPost(imageLink, totalPosts + 1, document.getElementById("postText").value)
   data = {
     postNumber: totalPosts + 1
   }
-  db.collection('users').doc(myUser).update(data)
+  await db.collection('users').doc(myUser).update(data)
   document.getElementById("postText").value = ""
   hidePostBox()
+  setTimeout(location.reload(), 2000)
 
-
-}).catch(function(error) {
-
+}).catch(async function(error) {
+  await createPost("", totalPosts + 1, document.getElementById("postText").value)
+  data = {
+    postNumber: totalPosts + 1
+  }
+  await db.collection('users').doc(myUser).update(data)
+  document.getElementById("postText").value = ""
+  hidePostBox()
+  alert("You didn't upload an image, is that right? If not, try again. If this happens many times, please reach out to us at apptivism.app@gmail.com")
+  setTimeout(location.reload(), 2000)
 });
 }
 
@@ -158,6 +166,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
       const loginMap = await db.collection("users").where("email", "==", firebase.auth().currentUser.email).get()
       const loginData = loginMap.docs.map(doc => doc.data())
       myUser = loginData[0].userName
+      localStorage["blocked"] = loginData[0].blocked;
       localStorage['myUser'] = loginData[0].userName;
       console.log(myUser)
 
@@ -450,7 +459,9 @@ console.log(dictionaryArray)
  async function addToTable(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color, data){
   d = new Date()
   n = d.getTime()
-
+  if (imgSource == "" || imgSource == " "){
+    imgSource = "apptivistLogorn.png"
+  }
   var tableRef = document.getElementById('myTable').getElementsByTagName('tbody')[0];
   var reformattedDate = new Date((timestamp-25200)*1000).toUTCString()
   var indicator = " AM"
@@ -460,6 +471,7 @@ console.log(dictionaryArray)
     hour = hour - 12
 
   } 
+  
   reformattedDate = reformattedDate.slice(0,17) + String(hour) + reformattedDate.slice(19,22) + indicator
   var timeInfo = document.createTextNode(reformattedDate)
 
@@ -551,7 +563,12 @@ var picCell = newRow.insertCell(1);
 // Append a text node to the cell
 
 
-var newText  = document.createTextNode(caption);
+var newText  = document.createElement("span")
+newText.innerHTML = caption
+newText.style.whiteSpace = "pre-wrap"
+
+console.log(newText)
+
 var likesDiv = document.createElement("div")
 likesDiv.style.display = "inline"
 
@@ -1244,20 +1261,33 @@ profileImage.classList.add("profile-pic")
 }
 
 function editUser(){
+
   if (myUser == userToView) {
     document.getElementById("profileSettings").style.display = "block"
   }
+  else {
+    document.getElementById("blockButton").style.display = "block"
+  }
+
 }
 
 async function getUserData() {
   var storageRef = storage.ref();
   var cool = await storageRef.child("default" + "/" +  "pfp_400x400.png").getDownloadURL()
   userD = await db.collection("users").doc(userToView).get()
-  
   document.getElementById("profileImage").src = userD.data().pfp || cool
   document.getElementById("bio").innerText = userD.data().bio
   document.getElementById("countFollowers").innerText = userD.data().followers.length + " followers"
   document.getElementById("countFollowing").innerText = userD.data().following.length + " following"
+  if (userD.data().blocked){
+    console.log('mitusllfnskldnfaksjdf')
+    if (userD.data().blocked.includes(myUser)){
+      document.getElementById("blocked").style.display = "none"
+      document.getElementById("myTable").style.display = "none"
+      document.getElementById("protestsTable").style.display = "none"
+      document.getElementById("blockedText").style.display = "block"
+    }
+  }
 }
 
 async function follow() {
@@ -1756,10 +1786,22 @@ function addToDashboard(user, isGoing){
   }
 
   async function blockUser(user) {
+    var r = confirm("Are you sure you want to block this user?")
+    if (r){
     var ref  = await db.collection('users').doc(myUser)
-    ref.update({
-      blocked: firebase.firestore.FieldValue.arrayUnion(myUser)
+   await  ref.update({
+      blocked: firebase.firestore.FieldValue.arrayUnion(user)
+
     })
+    var secondref = await db.collection('users').doc(user)
+    await secondref.update({
+      blockedBy: firebase.firestore.FieldValue.arrayUnion(myUser)
+    })
+    
+  
+  }
+
+  setTimeout(location.reload(), 2000)
   }
 
   async function flagpost(handle, postNumber) {
@@ -1777,3 +1819,15 @@ function addToDashboard(user, isGoing){
       })
     }
   }
+
+  function viewMyFeed2() {
+    localStorage["MP"] = true
+    window.location.href = "realfeed.html";
+  }
+
+function redirected(){
+  if (localStorage["MP"] == "true"){
+    showPostBox()
+  }
+  localStorage["MP"] = false
+}

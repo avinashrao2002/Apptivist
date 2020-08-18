@@ -17,7 +17,7 @@
   <title id>Apptivism</title>
 </head>
 
-<body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), retrieveFeed(), numpostRetriever()" >
+<body onload = "checker(), preventHacking(), checkIfLoggedIn(), Loaded(), hidePostBox(), redirected(), retrieveFeed(), numpostRetriever()" >
 <!-- Top navigation -->
 <div class="topnav">
 
@@ -51,7 +51,8 @@
 
     </tbody>
   </table>
-<input type="text" name="" id="comment" style = "color:#124665;">
+<input type="text" name="" id="comment" style = "color:#124665; margin-top: 50px; margin-bottom: 20px;"> 
+
 <button onclick="makeAComment()" class="myRealButtons" style="background-color: #124665; color: #EAEEED; margin-left: 0px; " id = "submitComment"> Comment </button>
 Refresh to see your comment/like
   </div>
@@ -62,8 +63,11 @@ Refresh to see your comment/like
 
 <div id="makePost" style="margin-top: 20px; text-align: center; display: none;" >
   <div style="display: inline;">
-    <label for="caption" style="margin-right: 20px; color: black;">Give your post a nice caption</label><input type="text" name="caption" id="postText" class="postText" style="width: 600px; height: 50px; border-radius: 20px;">
-    </div>
+    <label for="caption" style="margin-right: 20px; color: black;">Give your post a nice caption</label>
+    <br>
+    <!--<input type="text" name="caption" id="postText" class="postText" style="width: 600px; height: 50px; border-radius: 20px;">-->
+    <textarea name="caption" id="postText" cols="30" rows="30"></textarea>
+  </div>
     <br>
     <label for="uploadImage" class="myRealButtons" style="color: black; height: 30px; width: 300px; border: 20px thin black; cursor: pointer; vertical-align: top; margin-top: 20px;">Click Here to Choose a Picture</label>
     <input type="file" id ="uploadImage" style="margin-top: 20px; margin-bottom: 40px; color: black; font-size: 20px; vertical-align: top; margin-top: 20px;"> 
