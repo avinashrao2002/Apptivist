@@ -1118,6 +1118,9 @@ console.log(dictionaryArray)
  async function addToMarket(imgSource, caption, handle, pfp, timestamp, postNumber, newLikes, color, data){
   d = new Date()
   n = d.getTime()
+  if (imgSource == "" || imgSource == " "){
+    imgSource = "apptivistLogorn.png"
+  }
   var tableRef = document.getElementById('myMarket').getElementsByTagName('tbody')[0];
   var reformattedDate = new Date((timestamp-25200)*1000).toUTCString()
   var indicator = " AM"
